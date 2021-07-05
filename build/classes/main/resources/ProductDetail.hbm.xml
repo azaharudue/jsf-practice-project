@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<hibernate-mapping >
+
+<class name="main.java.entities.ProductDetail"  table="product_detail">
+         <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <property name="value"   />        
+              
+    <many-to-one name="product" class="main.java.entities.Product"    column="product_id"   fetch="select"  />
+   
+         
+         
+    </class>
+
+</hibernate-mapping>

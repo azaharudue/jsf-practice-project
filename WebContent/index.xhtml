@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+      
+
+      <h:head><h1> Product table</h1></h:head>
+      <h:body>
+        <a href="hello.xhtml"  >Go to Hello Page</a> 
+  <br />
+      <h:form>
+	<div class="card">
+	
+	<h:outputText value="Total products :#{basicView.products.size()}" />
+	
+		<p:dataTable value="#{basicView.products}" var="product">
+	<p:column>
+		<f:facet name="header">
+			<h:outputText value="Product ID"></h:outputText>
+		</f:facet>
+		<h:outputText value="#{product.id}"></h:outputText>
+	</p:column>
+	<p:column>
+		<f:facet name="header">
+			<h:outputText value="Product Name"></h:outputText>
+		</f:facet>
+		<h:outputText value="#{product.name}"></h:outputText>
+	</p:column>
+	<p:column>
+		<f:facet name="header">
+			<h:outputText value="Product Price"></h:outputText>
+		</f:facet>
+		<h:outputText value="#{product.price}"></h:outputText>
+	</p:column>
+
+</p:dataTable>
+	</div>
+</h:form></h:body>
+
+
+</html>
