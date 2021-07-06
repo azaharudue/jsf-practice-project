@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<h1>Detail view of products</h1>
+</h:head>
+<h:body>
+	<a href="index.xhtml"> Back to Product list </a>
+	<br />
+	<div class="card">
+
+		<h:outputText
+			value="Total products :#{detailView.productDetails.size()}" />
+
+		<p:dataTable value="#{detailView.productDetails}"
+			var="tdProductDetails">
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Product ID"></h:outputText>
+				</f:facet>
+				<h:outputText value="#{tdProductDetails.product.id}"></h:outputText>
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Product Name"></h:outputText>
+				</f:facet>
+				<h:outputText value="#{tdProductDetails.product.name}"></h:outputText>
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Product Price"></h:outputText>
+				</f:facet>
+				<h:outputText value="#{tdProductDetails.product.price}"></h:outputText>
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Company"></h:outputText>
+				</f:facet>
+				<h:outputText value="#{tdProductDetails.product.company.name}"></h:outputText>
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Description"></h:outputText>
+				</f:facet>
+				<h:outputText value="#{tdProductDetails.value} "></h:outputText>
+			</p:column>
+
+		</p:dataTable>
+	</div>
+
+</h:body>
+</html>
+

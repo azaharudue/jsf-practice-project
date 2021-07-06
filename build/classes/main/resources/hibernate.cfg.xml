@@ -26,6 +26,7 @@
        
       <!--Mapping  Queries mapping files --> 
         <mapping resource = "main/resources/queries/ProductQueries.hbm.xml" />
+	<!-- <mapping resource = "main/resources/queries/ProductDetailQueries.hbm.xml" />  -->
 
        
    </session-factory>

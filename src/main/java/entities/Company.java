@@ -38,6 +38,29 @@ public class Company
 		this.products = products;
 	}
 
+	/**
+	 * @param id
+	 * @param name
+	 * @param location
+	 * @param products
+	 */
+	public Company(final int id, final String name, final String location, final List<Product> products)
+	{
+		this.id = id;
+		this.name = name;
+		this.location = location;
+		this.products = products;
+	}
+
+	@Override
+	public Company clone()
+	{
+		return new Company(this.getId(), this.getName(), this.getLocation(), this.getProducts());
+	}
+
+	/*
+	 * Getters & Setters
+	 */
 	public int getId()
 	{
 		return this.id;

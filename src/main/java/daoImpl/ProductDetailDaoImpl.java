@@ -124,7 +124,40 @@ public class ProductDetailDaoImpl implements ProductDetailDao<ProductDetail, Ser
 	@Override
 	public List<ProductDetail> findAll()
 	{
-		// TODO Auto-generated method stub
+		try
+		{
+			this.session = SessionUtils.getSessionFactory().openSession();
+			this.tx = this.session.beginTransaction();
+
+			/*
+			 * Uses Hql hardcoded query
+			 */
+
+			// Gets the hql string
+			// final String hql = ProductHql.getAllProductHql();
+			// final List<Product> products =
+			// this.session.createQuery(hql).getResultList();
+
+			/**
+			 * Uses named query
+			 */
+			final List<ProductDetail> details = this.session.createNamedQuery("getAllProductDetails").getResultList();
+
+			System.out.println("\t--------Product name------|\t costs------------------\n");
+			for (final ProductDetail productDetail : details)
+				System.out.println("\t|" + productDetail.getId() + "\t\t" + productDetail.getValue() + "|");
+
+			return details;
+		}
+		catch (final Exception ex)
+		{
+			ex.printStackTrace();
+			this.tx.rollback();
+		}
+		finally
+		{
+			this.session.close();
+		}
 		return null;
 	}
 

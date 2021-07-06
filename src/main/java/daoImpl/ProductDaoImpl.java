@@ -1,14 +1,12 @@
+
+package main.java.daoImpl;
+
 /**
  * @author azahar
  */
-package main.java.daoImpl;
 
 import java.io.Serializable;
 import java.util.List;
-
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Named;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -18,18 +16,10 @@ import main.java.dao.ProductDao;
 import main.java.entities.Product;
 import main.java.utils.SessionUtils;
 
-@Named
-@ApplicationScoped
 public class ProductDaoImpl implements ProductDao<Product, Serializable>
 {
 	private Session session = null;
 	private Transaction tx = null;
-
-	@PostConstruct
-	public void init()
-	{
-
-	}
 
 	/**
 	 * Persist an Object

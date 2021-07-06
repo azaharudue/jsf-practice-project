@@ -8,33 +8,107 @@
       xmlns:p="http://primefaces.org/ui">
       
 
-      <h:head><h1> Product table</h1></h:head>
+      <h:head>
+       <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1"/>
+      <title> Products in Crud operation</title>      
+      
+      </h:head>
       <h:body>
-        <a href="hello.xhtml"  >Go to Hello Page</a> 
+        <a href="details.xhtml"  >Go to Product details page</a> 
   <br />
       <h:form>
+    
+     <div class="card">
+        <h5>Products</h5>
+        <p:dataTable id="products" var="product" value="#{basicView.products}" editable="true"
+                     style="margin-bottom:20px">
+
+            <p:ajax event="rowEdit" listener="#{dtEditView.onRowEdit}" update=":form:msgs"/>
+            <p:ajax event="rowEditCancel" listener="#{dtEditView.onRowCancel}" update=":form:msgs"/>
+
+            <p:column headerText="Code">
+                <p:cellEditor>
+                    <f:facet name="output">
+                        <h:outputText value="#{product.code}"/>
+                    </f:facet>
+                    <f:facet name="input">
+                        <p:inputText id="modelInput" value="#{product.code}" style="width:100%"/>
+                    </f:facet>
+                </p:cellEditor>
+            </p:column>
+
+            <p:column headerText="Name">
+                <p:cellEditor>
+                    <f:facet name="output">
+                        <h:outputText value="#{product.name}"/>
+                    </f:facet>
+                    <f:facet name="input">
+                        <p:inputText value="#{product.name}" style="width:100%" label="Name"/>
+                    </f:facet>
+                </p:cellEditor>
+            </p:column>
+
+            <p:column headerText="Status">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{product.inventoryStatus}"/></f:facet>
+                    <f:facet name="input">
+                        <h:selectOneMenu value="#{product.inventoryStatus}" style="width:100%">
+                            <f:selectItems value="#{dtEditView.inventoryStatusList}" var="status"
+                                           itemLabel="#{status.text}" itemValue="#{status}"/>
+                        </h:selectOneMenu>
+                    </f:facet>
+                </p:cellEditor>
+            </p:column>
+
+            <p:column headerText="Price">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="$#{product.price}"/></f:facet>
+                    <f:facet name="input"><p:inputText value="#{product.price}" style="width:100%"
+                                                       label="Price"/></f:facet>
+                </p:cellEditor>
+            </p:column>
+
+            <p:column style="width:6rem">
+                <p:rowEditor editTitle="Edit Row" cancelTitle="Cancel Edit" saveTitle="Save Row"/>
+            </p:column>
+        </p:dataTable>
+    </div>
+    
+    
+      
 	<div class="card">
 	
 	<h:outputText value="Total products :#{basicView.products.size()}" />
 	
-		<p:dataTable value="#{basicView.products}" var="product">
+		<p:dataTable value="#{basicView.products}" var="dtProducts" paginatorPosition="bottom">
+	  <f:facet name="header">
+                <div class="products-table-header">
+                    <span style="font-weight: bold">PRODUCTS</span>
+
+                    <span class="filter-container ui-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <p:inputText id="globalFilter" onkeyup="PF('dtProducts').filter()" placeholder="Search"/>
+                    </span>
+
+                </div>
+            </f:facet>
 	<p:column>
 		<f:facet name="header">
 			<h:outputText value="Product ID"></h:outputText>
 		</f:facet>
-		<h:outputText value="#{product.id}"></h:outputText>
+		<h:outputText value="#{dtProducts.id}"></h:outputText>
 	</p:column>
 	<p:column>
 		<f:facet name="header">
 			<h:outputText value="Product Name"></h:outputText>
 		</f:facet>
-		<h:outputText value="#{product.name}"></h:outputText>
+		<h:outputText value="#{dtProducts.name}"></h:outputText>
 	</p:column>
 	<p:column>
 		<f:facet name="header">
 			<h:outputText value="Product Price"></h:outputText>
 		</f:facet>
-		<h:outputText value="#{product.price}"></h:outputText>
+		<h:outputText value="#{dtProducts.price}"></h:outputText>
 	</p:column>
 
 </p:dataTable>

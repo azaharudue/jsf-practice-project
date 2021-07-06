@@ -39,6 +39,28 @@ public class Product
 	}
 
 	/**
+	 * @param id
+	 * @param name
+	 * @param price
+	 * @param productDetails
+	 * @param company
+	 */
+	public Product(final Integer id, final String name, final BigDecimal price, final Set<ProductDetail> productDetails, final Company company)
+	{
+		this.id = id;
+		this.name = name;
+		this.price = price;
+		this.productDetails = productDetails;
+		this.company = company;
+	}
+
+	@Override
+	public Product clone()
+	{
+		return new Product(this.getId(), this.getName(), this.price, this.getProductDetails(), this.getCompany());
+	}
+
+	/**
 	 * @return the id
 	 */
 	public Integer getId()
