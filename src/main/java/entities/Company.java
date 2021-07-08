@@ -5,6 +5,10 @@ package main.java.entities;
 
 import java.util.List;
 
+import javax.validation.constraints.NotBlank;
+
+import org.hibernate.validator.constraints.Length;
+
 /**
  * @author Azahar Hossain
  *
@@ -13,8 +17,12 @@ public class Company
 {
 	private int id;
 
+	@NotBlank
+	@Length(min = 3, max = 255)
 	private String name;
 
+	@NotBlank
+	@Length(min = 2, max = 255)
 	private String location;
 
 	private List<Product> products;
@@ -36,6 +44,14 @@ public class Company
 		this.name = name;
 		this.location = location;
 		this.products = products;
+	}
+
+	/**
+	 * @param name
+	 */
+	public Company(final String name)
+	{
+		this.name = name;
 	}
 
 	/**

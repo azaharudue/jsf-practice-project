@@ -3,6 +3,11 @@ package main.java.entities;
 import java.math.BigDecimal;
 import java.util.Set;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
+
 /**
  * @author azahar copyright (c) 2021
  */
@@ -10,8 +15,11 @@ public class Product
 {
 	private Integer id;
 
+	@NotBlank
+	@Length(min = 3, max = 255)
 	private String name;
 
+	@NotNull
 	private BigDecimal price;
 
 	private Set<ProductDetail> productDetails;

@@ -25,14 +25,16 @@ public class ProductDaoImpl implements ProductDao<Product, Serializable>
 	 * Persist an Object
 	 */
 	@Override
-	public void persist(final Product product)
+	public void save(final Product product)
 	{
 		try
 		{
 			this.session = SessionUtils.getSessionFactory().openSession();
 			this.tx = this.session.beginTransaction();
 			// We can use sssion.evict() for a detcahed instance.
-			this.session.persist(product);
+			// this.session.persist(product);
+			this.session.saveOrUpdate(product);
+
 			this.tx.commit();
 
 		}

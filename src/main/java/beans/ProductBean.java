@@ -10,9 +10,11 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
+import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.RowEditEvent;
 
 import main.java.daoImpl.ProductDaoImpl;
+import main.java.entities.Company;
 import main.java.entities.Product;
 
 @Named("basicView")
@@ -25,6 +27,10 @@ public class ProductBean implements Serializable
 	private final ProductDaoImpl productDAO;
 
 	private List<Product> products = new ArrayList<Product>();
+
+	private Product selectedProduct;
+
+	private List<Product> selectedProducts;
 
 	public ProductBean()
 	{
@@ -44,16 +50,91 @@ public class ProductBean implements Serializable
 		return this.products;
 	}
 
-	public void onRowEdit(RowEditEvent<Product> event)
+	/**
+	 * @return the selectedProduct
+	 */
+	public Product getSelectedProduct()
 	{
-		final FacesMessage msg = new FacesMessage("Product Edited", String.valueOf(event.getObject().getCode()));
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+		return this.selectedProduct;
 	}
 
-	public void onRowCancel(RowEditEvent<Product> event)
+	/**
+	 * @param products the products to set
+	 */
+	public void setProducts(final List<Product> products)
 	{
-		final FacesMessage msg = new FacesMessage("Edit Cancelled", String.valueOf(event.getObject().getCode()));
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+		this.products = products;
 	}
 
+	/**
+	 * @param selectedProduct the selectedProduct to set
+	 */
+	public void setSelectedProduct(final Product selectedProduct)
+	{
+		this.selectedProduct = selectedProduct;
+	}
+
+	/**
+	 * @return the selectedProducts
+	 */
+	public List<Product> getSelectedProducts()
+	{
+		return this.selectedProducts;
+	}
+
+	/**
+	 * @param selectedProducts the selectedProducts to set
+	 */
+	public void setSelectedProducts(final List<Product> selectedProducts)
+	{
+		this.selectedProducts = selectedProducts;
+	}
+
+	public void openNew()
+	{
+		this.selectedProduct = new Product();
+		this.selectedProduct.setCompany(new Company());
+	}
+
+	public String saveProduct()
+	{
+		try
+		{
+
+			this.products.add(this.selectedProduct);
+			this.productDAO.save(this.selectedProduct);
+
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Product created!"));
+
+		}
+		catch (final Exception e)
+		{
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getLocalizedMessage(), "Product not created"));
+
+		}
+		return null;
+	}
+
+	public void deleteProduct()
+	{
+
+	}
+
+	public void onRowEdit(final RowEditEvent event)
+	{
+		final DataTable dataTable = (DataTable) event.getSource();
+		Product updatedProduct = null;
+		if (dataTable != null)
+			updatedProduct = (Product) dataTable.getRowData();
+		this.productDAO.save(updatedProduct);
+		final FacesMessage mgs = new FacesMessage("Product Edited", String.valueOf(event.getObject()));
+		FacesContext.getCurrentInstance().addMessage(null, mgs);
+
+	}
+
+	public void onRowCancel(final RowEditEvent event)
+	{
+		final FacesMessage mgs = new FacesMessage("Edit Cancelled", String.valueOf(event.getObject()));
+		FacesContext.getCurrentInstance().addMessage(null, mgs);
+	}
 }
