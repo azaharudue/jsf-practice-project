@@ -1,9 +1,7 @@
-
-package main.java.daoImpl;
-
 /**
- * @author azahar
+ *
  */
+package main.java.daoImpl;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,29 +10,33 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
-import main.java.dao.ProductDao;
-import main.java.entities.Product;
+import main.java.dao.CompanyDao;
+import main.java.entities.Company;
 import main.java.utils.SessionUtils;
 
-public class ProductDaoImpl implements ProductDao<Product, Serializable> {
+/**
+ * @author azahar
+ *
+ */
+public class CompanyDaoImpl implements CompanyDao<Company, Serializable> {
 	private Session session = null;
 	private Transaction tx = null;
 
 	@Override
-	public void delete(final Product product) {
+	public void delete(final Company company) {
 
 		try {
 			this.session = SessionUtils.getSessionFactory().openSession();
 			this.tx = this.session.beginTransaction();
 			// Uses session.delete()
-			this.session.delete(product);
+			this.session.delete(company);
 
 			// // Uses HQL queries // Gets the hql string and use Hql final
 			// String hql = ProductHql.deleteProductHql(product);
 			// this.session.createQuery(hql).executeUpdate();
 
-			final Query query = this.session.createNamedQuery("deleteProductById");
-			query.setParameter("id", product.getId());
+			final Query query = this.session.createNamedQuery("deleteCompanyById");
+			query.setParameter("id", company.getId());
 			query.executeUpdate();
 			this.tx.commit();
 
@@ -59,7 +61,7 @@ public class ProductDaoImpl implements ProductDao<Product, Serializable> {
 			// Gets the hql string and use Hql
 			// final String hql = ProductHql.deleteAllProductsHql();
 			// this.session.createQuery(hql).executeUpdate();
-			this.session.createNamedQuery("deleteAllProducts").executeUpdate();
+			this.session.createNamedQuery("deleteAllCompanies").executeUpdate();
 			this.tx.commit();
 
 		} catch (final Exception ex) {
@@ -72,7 +74,7 @@ public class ProductDaoImpl implements ProductDao<Product, Serializable> {
 	}
 
 	@Override
-	public List<Product> findAll() {
+	public List<Company> findAll() {
 
 		try {
 			this.session = SessionUtils.getSessionFactory().openSession();
@@ -91,13 +93,13 @@ public class ProductDaoImpl implements ProductDao<Product, Serializable> {
 			 * Uses named query
 			 */
 			@SuppressWarnings("unchecked")
-			final List<Product> products = this.session.createNamedQuery("getAllProducts").getResultList();
+			final List<Company> companies = this.session.createNamedQuery("getAllCompanies").getResultList();
 
 			System.out.println("\t--------Product name------|\t costs------------------\n");
-			for (final Product product : products)
-				System.out.println("\t|" + product.getName() + "\t\t" + product.getPrice() + "|");
+			for (final Company company : companies)
+				System.out.println("\t|" + company.getName() + "\t\t" + company.getLocation() + "|");
 
-			return products;
+			return companies;
 		} catch (final Exception ex) {
 			ex.printStackTrace();
 			this.tx.rollback();
@@ -108,35 +110,29 @@ public class ProductDaoImpl implements ProductDao<Product, Serializable> {
 	}
 
 	/**
-	 * Gets a product by Id
+	 * Gets a company by Id
 	 *
 	 * Uses HQL
 	 */
 	@Override
-	public Product findById(final Serializable id) {
+	public Company findById(final Serializable id) {
 		try {
 			this.session = SessionUtils.getSessionFactory().openSession();
 			this.tx = this.session.beginTransaction();
-			/**
-			 * Uses hard coded hql
-			 */
-			// // Gets the Hql String
-			// final String hql = ProductHql.getProductByIdHql();
-			// System.out.println(hql);
-			// final Query<Product> query = this.session.createQuery(hql);
+
 			/**
 			 * Uses named query
 			 */
-			final Query<Product> query = this.session.createNamedQuery("getProductById");
+			final Query<Company> query = this.session.createNamedQuery("getCompanyById");
 			query.setParameter("id", id);
-			final Product product = query.getSingleResult();
+			final Company company = query.getSingleResult();
 
 			this.tx.commit();
-			System.out.println(product);
-			return product;
+			System.out.println(company);
+			return company;
 
 		} catch (final Exception ex) {
-			System.out.println("Product  with the id " + id + " not found!");
+			System.out.println("Company  with the id " + id + " not found!");
 			ex.printStackTrace();
 
 			this.tx.rollback();
@@ -150,13 +146,13 @@ public class ProductDaoImpl implements ProductDao<Product, Serializable> {
 	 * Persist an Object
 	 */
 	@Override
-	public void save(final Product product) {
+	public void save(final Company company) {
 		try {
 			this.session = SessionUtils.getSessionFactory().openSession();
 			this.tx = this.session.beginTransaction();
 			// We can use sssion.evict() for a detcahed instance.
 			// this.session.persist(product);
-			this.session.save(product);
+			this.session.save(company);
 
 			this.tx.commit();
 
@@ -174,7 +170,7 @@ public class ProductDaoImpl implements ProductDao<Product, Serializable> {
 	 *
 	 */
 	@Override
-	public void update(final Product product) {
+	public void update(final Company company) {
 		try {
 			this.session = SessionUtils.getSessionFactory().openSession();
 			this.tx = this.session.beginTransaction();
@@ -182,7 +178,7 @@ public class ProductDaoImpl implements ProductDao<Product, Serializable> {
 			// final String hql = ProductHql.updateProductHql(product);
 			// this.session.createQuery(hql).executeUpdate();
 			// this.findAll();
-			this.session.saveOrUpdate(product);
+			this.session.saveOrUpdate(company);
 			this.tx.commit();
 
 		} catch (final Exception ex) {
@@ -193,5 +189,4 @@ public class ProductDaoImpl implements ProductDao<Product, Serializable> {
 		}
 
 	}
-
 }

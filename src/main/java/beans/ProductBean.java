@@ -13,16 +13,18 @@ import javax.inject.Named;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.RowEditEvent;
 
+import main.java.daoImpl.CompanyDaoImpl;
 import main.java.daoImpl.ProductDaoImpl;
 import main.java.entities.Company;
 import main.java.entities.Product;
 
 @Named("basicView")
 @ViewScoped
-public class ProductBean implements Serializable
-{
+public class ProductBean implements Serializable {
 
 	private static final long serialVersionUID = -3816399998127217254L;
+
+	private final CompanyDaoImpl companyDAO;
 
 	private final ProductDaoImpl productDAO;
 
@@ -32,109 +34,109 @@ public class ProductBean implements Serializable
 
 	private List<Product> selectedProducts;
 
-	public ProductBean()
-	{
+	public ProductBean() {
 		System.out.println("basicView construct");
 
 		this.productDAO = new ProductDaoImpl();
+		this.companyDAO = new CompanyDaoImpl();
 	}
 
-	@PostConstruct
-	public void populateProductList()
-	{
-		this.products = this.productDAO.findAll();
+	public void clearForm() {
+
+		this.selectedProduct = null;
 	}
 
-	public List<Product> getProducts()
-	{
+	public void deleteProduct() {
+
+	}
+
+	public List<Product> getProducts() {
 		return this.products;
 	}
 
 	/**
 	 * @return the selectedProduct
 	 */
-	public Product getSelectedProduct()
-	{
+	public Product getSelectedProduct() {
 		return this.selectedProduct;
-	}
-
-	/**
-	 * @param products the products to set
-	 */
-	public void setProducts(final List<Product> products)
-	{
-		this.products = products;
-	}
-
-	/**
-	 * @param selectedProduct the selectedProduct to set
-	 */
-	public void setSelectedProduct(final Product selectedProduct)
-	{
-		this.selectedProduct = selectedProduct;
 	}
 
 	/**
 	 * @return the selectedProducts
 	 */
-	public List<Product> getSelectedProducts()
-	{
+	public List<Product> getSelectedProducts() {
 		return this.selectedProducts;
 	}
 
-	/**
-	 * @param selectedProducts the selectedProducts to set
-	 */
-	public void setSelectedProducts(final List<Product> selectedProducts)
-	{
-		this.selectedProducts = selectedProducts;
+	public void onRowCancel(final RowEditEvent<Product> event) {
+
+		final FacesMessage mgs = new FacesMessage("Edit Cancelled", String.valueOf(event.getObject()));
+		FacesContext.getCurrentInstance().addMessage(null, mgs);
+		this.clearForm();
 	}
 
-	public void openNew()
-	{
-		this.selectedProduct = new Product();
-		this.selectedProduct.setCompany(new Company());
-	}
-
-	public String saveProduct()
-	{
-		try
-		{
-
-			this.products.add(this.selectedProduct);
-			this.productDAO.save(this.selectedProduct);
-
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Product created!"));
-
-		}
-		catch (final Exception e)
-		{
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getLocalizedMessage(), "Product not created"));
-
-		}
-		return null;
-	}
-
-	public void deleteProduct()
-	{
-
-	}
-
-	public void onRowEdit(final RowEditEvent event)
-	{
+	public void onRowEdit(final RowEditEvent<Product> event) {
 		final DataTable dataTable = (DataTable) event.getSource();
 		Product updatedProduct = null;
+
 		if (dataTable != null)
 			updatedProduct = (Product) dataTable.getRowData();
-		this.productDAO.save(updatedProduct);
+		this.productDAO.update(updatedProduct);
+
 		final FacesMessage mgs = new FacesMessage("Product Edited", String.valueOf(event.getObject()));
 		FacesContext.getCurrentInstance().addMessage(null, mgs);
 
 	}
 
-	public void onRowCancel(final RowEditEvent event)
-	{
-		final FacesMessage mgs = new FacesMessage("Edit Cancelled", String.valueOf(event.getObject()));
-		FacesContext.getCurrentInstance().addMessage(null, mgs);
+	public void openNew() {
+		this.selectedProduct = new Product();
+		this.selectedProduct.setCompany(new Company());
+	}
+
+	@PostConstruct
+	public void populateProductList() {
+		this.products = this.productDAO.findAll();
+
+	}
+
+	public String saveProduct() {
+		try {
+
+			this.companyDAO.save(this.selectedProduct.getCompany());
+			this.productDAO.save(this.selectedProduct);
+
+			this.products.add(this.selectedProduct);
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Product created!"));
+
+		} catch (final Exception e) {
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(e.getLocalizedMessage(), "Product not created!"));
+
+		}
+		return null;
+	}
+
+	/**
+	 * @param products
+	 *            the products to set
+	 */
+	public void setProducts(final List<Product> products) {
+		this.products = products;
+	}
+
+	/**
+	 * @param selectedProduct
+	 *            the selectedProduct to set
+	 */
+	public void setSelectedProduct(final Product selectedProduct) {
+		this.selectedProduct = selectedProduct;
+	}
+
+	/**
+	 * @param selectedProducts
+	 *            the selectedProducts to set
+	 */
+	public void setSelectedProducts(final List<Product> selectedProducts) {
+		this.selectedProducts = selectedProducts;
 	}
 }
