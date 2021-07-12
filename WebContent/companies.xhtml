@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<h:head>
+	<meta charset="utf-8" name="viewport"
+		content="width=device-width, initial-scale=1" />
+	<title>Products</title>
+
+
+</h:head>
+
+<h:body>
+
+	<h:outputStylesheet name="style.css" library="css" />
+
+	<a href="index.xhtml">Go to Products page</a>
+	<br />
+	<!-- Use for a global message  -->
+	<p:growl id="growl" redisplay="false" showDetail="true" />
+
+	<h:form id="formProduct">
+
+		<p:toolbar>
+			<p:toolbarGroup>
+
+				<!-- Add new Product Button -->
+				<p:commandButton value="Add new company" icon="pi pi-plus"
+					action="#{companyView.openNew}" update="dlgCompany"
+					oncomplete="PF('dlgCompanyWidgetVar').show()"
+					styleClass="ui-button-success " style="margin-right: .5rem">
+
+					<p:resetInput target=":formCompany:dlgCompany" />
+				</p:commandButton>
+
+				<!-- Delete Company Button -->
+
+				<p:commandButton id="delete-companies-button"
+					value="#{companyView.deleteButtonMessage}" icon="pi pi-trash"
+					action="#{companyView.deleteSelectedCompanies}"
+					styleClass="rounded-button ui-button-danger"
+					disabled="#{!(companyView.hasSelectedCompanies())}">
+
+					<p:confirm header="Confirmation"
+						message="Delete the selected companies?"
+						icon="pi pi-exclamation-triangle" />
+				</p:commandButton>
+
+
+			</p:toolbarGroup>
+		</p:toolbar>
+
+
+		<!-- Modal for adding a new company -->
+
+		<p:dialog id="dlgCompany" header="Company Details" showEffect="fade"
+			modal="true" widgetVar="dlgCompanyWidgetVar" responsive="true">
+
+			<p:outputPanel id="pnlManageCompanyContent" class="ui-fluid"
+				rendered="#{ companyView.selectedCompany ne null}">
+
+				<p:messages redisplay="true" />
+
+
+				<!-- company name -->
+				<div class="p-field">
+					<p:outputLabel for="companyName" value="Company Name" />
+					<p:inputText id="companyName"
+						value="#{companyView.selectedCompany.name}" required="true" />
+				</div>
+				<!-- company location -->
+				<div class="p-field">
+					<p:outputLabel for="companyLocation" value="Company Location" />
+					<p:inputText id="companyLocation"
+						value="#{companyView.selectedCompany.location}"
+						required="true" />
+				</div>
+				
+				<!-- //To do check: List of products to be added for a company? -->
+				
+			</p:outputPanel>
+
+			<f:facet name="footer">
+
+				<!-- save  -->
+				<p:commandButton value="Save" icon="pi pi-check"
+					process="pnlManageCompanyContent @this"
+					action="#{companyView.saveCompany}"
+					update=" :formCompany:pnlManageCompanyContent" resetValues="true" />
+
+				<!-- cancel  -->
+				<p:commandButton value="Cancel" icon="pi pi-times"
+					onclick="PF('dlgCompanyWidgetVar').hide()"
+					class="ui-button-secondary" />
+			</f:facet>
+		</p:dialog>
+
+
+		<!-- Data table for companies  -->
+		<!-- TO DO Features. -->
+		<!-- 1.  (Dashboard) which company has how many products  -->
+		<!-- 2.  (Geo Map) for company locations -->
+	
+
+
+	</h:form>
+
+</h:body>
+
+
+</html>

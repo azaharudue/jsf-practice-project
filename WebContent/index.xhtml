@@ -18,7 +18,7 @@
 
 <h:body>
 
-<h:outputStylesheet name="style.css"  library="css"/>
+	<h:outputStylesheet name="style.css" library="css" />
 
 	<a href="details.xhtml">Go to Product details page</a>
 	<br />
@@ -27,10 +27,9 @@
 
 	<h:form id="formProduct">
 
-
-
 		<p:toolbar>
 			<p:toolbarGroup>
+
 				<!-- Add new Product Button -->
 				<p:commandButton value="Add new product" icon="pi pi-plus"
 					action="#{basicView.openNew}" update="dlgProduct"
@@ -45,8 +44,8 @@
 				<p:commandButton id="delete-products-button"
 					value="#{basicView.deleteButtonMessage}" icon="pi pi-trash"
 					action="#{basicView.deleteSelectedProducts}"
-					styleClass="ui-button-danger"
-					disabled="#{!basicView.hasSelectedProducts()}">
+					styleClass="rounded-button ui-button-danger"
+					disabled="#{!(basicView.hasSelectedProducts())}">
 
 					<p:confirm header="Confirmation"
 						message="Delete the selected products?"
@@ -110,6 +109,7 @@
 				<!-- cancel  -->
 				<p:commandButton value="Cancel" icon="pi pi-times"
 					onclick="PF('dlgProductWidgetVar').hide()"
+					update= ":formProduct:dlgProduct"
 					class="ui-button-secondary" />
 			</f:facet>
 		</p:dialog>
@@ -120,11 +120,15 @@
 
 			<p:dataTable id="tblProduct" value="#{basicView.products}"
 				rowKey="#{tblVarProduct.id}" var="tblVarProduct"
+				widgetVar="tblWgtVarProducts"
 				selection="#{basicView.selectedProducts}" editable="true"
 				selectionPageOnly="false" paginator="true"
-				styleClass=" ui-datatable-products" rows="10" rowSelectMode="checkbox"
-				paginatorPosition="bottom">
+				styleClass=" ui-datatable-products" rows="10"
+				rowSelectMode="checkbox" paginatorPosition="bottom" reflow="true"
+				filteredValue="#{tblWgtVarProducts}"
+				emptyMessage="No products found with given criteria">
 
+				<!-- Ajax events -->
 
 				<p:ajax event="rowEdit" listener="#{basicView.onRowEdit}"
 					update=":growl" />
@@ -144,25 +148,37 @@
 					update=":formProduct:delete-products-button" />
 
 
+				<!-- Table header and global filter-->
 				<f:facet name="header">
-					<div class="products-table-header">
-						<h1>Products</h1>
-						<br />
-						<h:outputText value="Total products :#{basicView.products.size()}" />
-					</div>
+					<p:toolbar>
+						<p:toolbarGroup class="p-d-flex p-ai-center p-jc-between">
+							<h1>Products</h1>
+							<span align="left"><h:outputText
+									value="Total available products :#{basicView.products.size()}" /></span>
+						</p:toolbarGroup>
+						<p:toolbarGroup align="right">
+							<span><h:outputText value="Search from the table" /></span>
+							<span><p:inputText id="globalFilter"
+									onkeyup="PF('tblWgtVarProduct').filter()" style="width:20rem"
+									placeholder="Enter keyword" /> </span>
+						</p:toolbarGroup>
+					</p:toolbar>
+
 				</f:facet>
-
-
 				<!-- Selection -->
 				<p:column selectionMode="multiple" exportable="false"
-					headerText="Select/Deselect All"></p:column>
+					headerText="Select/Deselect All"
+					styleClass="leftAlignedColumnContent" />
+
 				<!-- id-->
-				<p:column headerText="ID">
+				<p:column headerText="ID" styleClass="leftAlignedColumnContent">
 					<h:outputText value="#{tblVarProduct.id}" />
 				</p:column>
 
 				<!-- name-->
-				<p:column headerText="Name">
+				<p:column headerText="Name" sortBy="#{tblVarProduct.name}"
+					filterBy="#{tblVarProduct.name}"
+					styleClass="leftAlignedColumnContent">
 					<p:cellEditor>
 						<f:facet name="output">
 							<h:outputText value="#{tblVarProduct.name}" />
@@ -176,7 +192,9 @@
 
 				<!-- price -->
 
-				<p:column headerText="Price">
+				<p:column headerText="Price" sortBy="#{tblVarProduct.price}"
+					filterBy="#{tblVarProduct.price}"
+					styleClass="leftAlignedColumnContent">
 					<p:cellEditor>
 						<f:facet name="output">
 							<h:outputText value="#{tblVarProduct.price}" />
@@ -187,17 +205,36 @@
 						</f:facet>
 					</p:cellEditor>
 				</p:column>
-				
-				
+
+				<!-- Company name -->
+
+				<p:column headerText="Company"
+					sortBy="#{tblVarProduct.company.name}"
+					filterBy="#{tblVarProduct.company.name}"
+					styleClass="leftAlignedColumnContent">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{tblVarProduct.company.name}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{tblVarProduct.company.name}"
+								style="width:100%" label="company name" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+
 				<!-- Edit pen -->
-				<p:column>
+				<p:column styleClass="centeredColumnContent"
+					headerText="Edit product(s)">
 
 
 					<p:rowEditor id="editrows" editTitle="Edit Row" icon="pi pi-pencil"
 						cancelTitle="Cancel Edit" saveTitle="Save Row" />
 				</p:column>
 
-				<p:column>
+				<p:column styleClass="centeredColumnContent"
+					headerText="Delete product(s)">
 					<p:commandButton class="ui-button-warning rounded-button"
 						icon="pi pi-trash" process="@this"
 						oncomplete="PF('dlgDeleteProduct').show()">
