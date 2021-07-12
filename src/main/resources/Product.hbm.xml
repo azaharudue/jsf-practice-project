@@ -14,7 +14,7 @@
 		  				 <key column="product_id" not-null="true"></key>
 			  			 <one-to-many class="main.java.entity.ProductDetail"></one-to-many>
 		 </set> -->
-		  <many-to-one name="company" class="main.java.entities.Company"   column="company_id"   fetch="select"  lazy="false" cascade = "all"  />
+		  <many-to-one name="company" class="main.java.entities.Company"   column="companyID"   fetch="select"  lazy="false"  />
  
  </class>
 </hibernate-mapping>

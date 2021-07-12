@@ -1,0 +1,13 @@
+@charset "ISO-8859-1";
+
+.ui-datatable-data>tr .ui-row-editor .ui-icon.ui-icon-pencil:before  {
+    background-image: url("#{resource['images/pencil.png']}");
+}
+
+.ui-datatable-data>tr .ui-row-editor .ui-icon.ui-icon-check {
+    background-image: url("#{resource['images/check.png']}");
+}
+
+.ui-datatable-data>tr .ui-row-editor .ui-icon.ui-icon-close {
+    background-image: url("#{resource['images/close.jpg']}");
+}

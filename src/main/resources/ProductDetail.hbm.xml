@@ -9,7 +9,7 @@
         </id>
         <property name="value"   />        
               
-    <many-to-one name="product" class="main.java.entities.Product"    column="product_id"   fetch="select"  lazy="false" />
+    <many-to-one name="product" class="main.java.entities.Product"    column="productID"   fetch="select"  lazy="false" />
    
          
          

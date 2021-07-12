@@ -8,7 +8,11 @@
             <generator class="identity" />
         </id>
 		  
-		  <property name="name"  > </property>
+		  <natural-id>
+		  	<property name="name"  unique="true"/>
+		  </natural-id>
+		  
+		  
         <property name="location" ></property>
 		 <!--  <set cascade="all"  name="productDetail" sort="unsorted" >
 		  				 <key column="product_id" not-null="true"></key>

@@ -13,12 +13,17 @@
 		content="width=device-width, initial-scale=1" />
 	<title>Products</title>
 
+
 </h:head>
+
 <h:body>
+
+<h:outputStylesheet name="style.css"  library="css"/>
+
 	<a href="details.xhtml">Go to Product details page</a>
 	<br />
 	<!-- Use for a global message  -->
-	<p:growl id="growl" redisplay="false" />
+	<p:growl id="growl" redisplay="false" showDetail="true" />
 
 	<h:form id="formProduct">
 
@@ -26,13 +31,33 @@
 
 		<p:toolbar>
 			<p:toolbarGroup>
+				<!-- Add new Product Button -->
 				<p:commandButton value="Add new product" icon="pi pi-plus"
 					action="#{basicView.openNew}" update="dlgProduct"
 					oncomplete="PF('dlgProductWidgetVar').show()"
-					styleClass="ui-button-success" style="margin-right: .5rem">
+					styleClass="ui-button-success " style="margin-right: .5rem">
+
+					<p:resetInput target=":formProduct:dlgProduct" />
 				</p:commandButton>
+
+				<!-- Delete Product Button -->
+
+				<p:commandButton id="delete-products-button"
+					value="#{basicView.deleteButtonMessage}" icon="pi pi-trash"
+					action="#{basicView.deleteSelectedProducts}"
+					styleClass="ui-button-danger"
+					disabled="#{!basicView.hasSelectedProducts()}">
+
+					<p:confirm header="Confirmation"
+						message="Delete the selected products?"
+						icon="pi pi-exclamation-triangle" />
+				</p:commandButton>
+
+
 			</p:toolbarGroup>
 		</p:toolbar>
+
+
 		<!-- Modal for adding a new product -->
 
 		<p:dialog id="dlgProduct" header="Product Details" showEffect="fade"
@@ -80,8 +105,7 @@
 				<p:commandButton value="Save" icon="pi pi-check"
 					process="pnlManageProductContent @this"
 					action="#{basicView.saveProduct}"
-					update=" :formProduct:pnlManageProductContent"
-					resetValues="true" />
+					update=" :formProduct:pnlManageProductContent" resetValues="true" />
 
 				<!-- cancel  -->
 				<p:commandButton value="Cancel" icon="pi pi-times"
@@ -94,15 +118,30 @@
 		<!-- Data table for products  -->
 		<div class="card">
 
-			<p:dataTable id="tblProduct" value="#{basicView.products}" rowKey="tblVarProduct"
-				var="tblVarProduct" selection="#{basicView.selectedProducts}" editable="true"  multiViewState="true"
-				>
+			<p:dataTable id="tblProduct" value="#{basicView.products}"
+				rowKey="#{tblVarProduct.id}" var="tblVarProduct"
+				selection="#{basicView.selectedProducts}" editable="true"
+				selectionPageOnly="false" paginator="true"
+				styleClass=" ui-datatable-products" rows="10" rowSelectMode="checkbox"
+				paginatorPosition="bottom">
 
 
 				<p:ajax event="rowEdit" listener="#{basicView.onRowEdit}"
 					update=":growl" />
 				<p:ajax event="rowEditCancel" listener="#{basicView.onRowCancel}"
 					update=":growl" />
+
+
+				<p:ajax event="rowSelect"
+					update=":formProduct:delete-products-button" />
+				<p:ajax event="rowUnselect"
+					update=":formProduct:delete-products-button" />
+				<p:ajax event="rowSelectCheckbox"
+					update=":formProduct:delete-products-button" />
+				<p:ajax event="rowUnselectCheckbox"
+					update=":formProduct:delete-products-button" />
+				<p:ajax event="toggleSelect"
+					update=":formProduct:delete-products-button" />
 
 
 				<f:facet name="header">
@@ -112,51 +151,96 @@
 						<h:outputText value="Total products :#{basicView.products.size()}" />
 					</div>
 				</f:facet>
+
+
 				<!-- Selection -->
 				<p:column selectionMode="multiple" exportable="false"
-					headerText="Select/Deselect All"></p:column> 
+					headerText="Select/Deselect All"></p:column>
 				<!-- id-->
 				<p:column headerText="ID">
 					<h:outputText value="#{tblVarProduct.id}" />
 				</p:column>
 
 				<!-- name-->
-				 <p:column headerText="Name">
-                <p:cellEditor>
-                    <f:facet name="output">
-                        <h:outputText value="#{tblVarProduct.name}"/>
-                    </f:facet>
-                    <f:facet name="input">
-                        <p:inputText value="#{tblVarProduct.name}" style="width:100%" label="Name"/>
-                    </f:facet>
-                </p:cellEditor>
-            </p:column>
+				<p:column headerText="Name">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{tblVarProduct.name}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{tblVarProduct.name}" style="width:100%"
+								label="Name" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
 
 				<!-- price -->
 
-				 <p:column headerText="Price">
-                <p:cellEditor>
-                    <f:facet name="output">
-                        <h:outputText value="#{tblVarProduct.price}"/>
-                    </f:facet>
-                    <f:facet name="input">
-                        <p:inputText value="#{tblVarProduct.price}" style="width:100%" label="price"/>
-                    </f:facet>
-                </p:cellEditor>
-            </p:column>
-
-				<!-- Edit pen -->
-				<p:column style="width:6rem">
-					<p:rowEditor editTitle="Edit Row" cancelTitle="Cancel Edit"
-						saveTitle="Save Row" />
+				<p:column headerText="Price">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{tblVarProduct.price}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{tblVarProduct.price}" style="width:100%"
+								label="price" />
+						</f:facet>
+					</p:cellEditor>
 				</p:column>
 				
+				
+				<!-- Edit pen -->
+				<p:column>
+
+
+					<p:rowEditor id="editrows" editTitle="Edit Row" icon="pi pi-pencil"
+						cancelTitle="Cancel Edit" saveTitle="Save Row" />
+				</p:column>
+
+				<p:column>
+					<p:commandButton class="ui-button-warning rounded-button"
+						icon="pi pi-trash" process="@this"
+						oncomplete="PF('dlgDeleteProduct').show()">
+
+						<f:setPropertyActionListener value="#{tblVarProduct}"
+							target="#{basicView.selectedProduct}" />
+					</p:commandButton>
+
+
+
+
+				</p:column>
+
+
 			</p:dataTable>
 
+			<p:confirmDialog widgetVar="dlgDeleteProduct" showEffect="fade"
+				width="300" message="Delete the product?" header="Confirm"
+				severity="warn">
+
+				<p:commandButton value="Yes" icon="pi pi-check" process="@this"
+					action="#{basicView.deleteProduct}"
+					oncomplete="PF('dlgDeleteProduct').hide()" />
+
+				<p:commandButton value="No" type="button"
+					styleClass="ui-button-secondary" icon="pi pi-times"
+					onclick="PF('dlgDeleteProduct').hide()" />
+
+			</p:confirmDialog>
+
+			<p:confirmDialog global="true" showEffect="fade" width="300">
+				<p:commandButton value="Yes" type="button"
+					styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+				<p:commandButton value="No" type="button"
+					styleClass="ui-confirmdialog-no ui-button-secondary"
+					icon="pi pi-times" />
+			</p:confirmDialog>
+
+
 		</div>
-		
+
 	</h:form>
-	
+
 </h:body>
 
 
