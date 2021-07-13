@@ -1,27 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
                                    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!--  Queries for product -->
+<!-- Queries for product -->
 <hibernate-mapping>
 
 
-<!-- Update a product 
-<query name="updateProductById">
-	<query-param name="id" type="Integer"/>
-	<query-param name="name" type="String"/>
-	<query-param name="price" type="DECIMAL "/>
-		<![CDATA[
-		Update 
-			Product p 
-		SET 
-			p.name = :name, p.price = :price
-		 WHERE  
-		 p.id = :id
-		]]>
-	</query>
--->
-<!-- Get all products -->
-<query name="getAllProducts" >
+	<!-- Update a product <query name="updateProductById"> <query-param name="id" 
+		type="Integer"/> <query-param name="name" type="String"/> <query-param name="price" 
+		type="DECIMAL "/> <![CDATA[ Update Product p SET p.name = :name, p.price 
+		= :price WHERE p.id = :id ]]> </query> -->
+	<!-- Get all products -->
+	<query name="getAllProducts">
 	
 		<![CDATA[
 		SELECT 
@@ -31,7 +20,7 @@
 		]]>
 	</query>
 	<!-- Get all productDetails -->
-<query name="getAllProductDetails" >
+	<query name="getAllProductDetails">
 	
 		<![CDATA[
 		SELECT 
@@ -41,8 +30,8 @@
 		]]>
 	</query>
 	<!-- Get a product -->
-<query name="getProductById">
-	<query-param name="id" type="Integer"/>
+	<query name="getProductById">
+		<query-param name="id" type="Integer" />
 		<![CDATA[
 		SELECT 
 			p 
@@ -52,9 +41,9 @@
 		p.id= :id
 		]]>
 	</query>
-		<!-- Get a product with details -->
-<query name="getDetailsByProductId">
-	<query-param name="id" type="Integer"/>
+	<!-- Get a product with details -->
+	<query name="getDetailsByProductId">
+		<query-param name="id" type="Integer" />
 		<![CDATA[
 		SELECT 
 			pd
@@ -65,7 +54,7 @@
 		]]>
 	</query>
 	<query name="getProductWithDetailsByValue">
-	<query-param name="value" type="String"/>
+		<query-param name="value" type="String" />
 		<![CDATA[
 		SELECT DISTINCT
 			pd.product
@@ -75,9 +64,9 @@
 			pd.value LIKE CONCAT('%', :value, '%')
 		]]>
 	</query>
-	
+
 	<query name="deleteProductById">
-	<query-param name=" id"  type="Integer"/>
+		<query-param name=" id" type="Integer" />
 		<![CDATA[
 		DELETE	
 		FROM 
@@ -93,10 +82,11 @@
 			Product			
 		]]>
 	</query>
-<!-- !!!!!!!!!!!!!!-Here are the aggregated functions/ customised queries other than CRUD-!!!!!!!!!!!!!!!!!!!-->
+	<!-- !!!!!!!!!!!!!!-Here are the aggregated functions/ customised queries 
+		other than CRUD-!!!!!!!!!!!!!!!!!!! -->
 
-<!-- Sum of prices  -->
-<query name="getSumOfPrices">
+	<!-- Sum of prices -->
+	<query name="getSumOfPrices">
 	
 		<![CDATA[
 		SELECT 
@@ -105,8 +95,8 @@
 			Product p
 		]]>
 	</query>
-	<!-- Average  of prices  -->
-<query name="getAvgSumCountOfPrices">
+	<!-- Average of prices -->
+	<query name="getAvgSumCountOfPrices">
 	
 		<![CDATA[
 		SELECT 
@@ -118,19 +108,19 @@
 		]]>
 	</query>
 
-<query name="getSummaryPerCompany">
+	<query name="getSummaryPerCompany">
 	
 		<![CDATA[
 		
- SELECT 
-		p.company AS company,
-		sum(p.price) AS totalPrice , 
-		avg(p.price) AS average, 
-		count(p.id) AS count
-FROM 
-		Product p		
-GROUP BY p.company
-		
+		 SELECT 
+				p.company AS company,
+				sum(p.price) AS totalPrice , 
+				avg(p.price) AS average, 
+				count(p.id) AS count
+		FROM 
+				Product p		
+		GROUP BY p.company
+				
 		]]>
 	</query>
 

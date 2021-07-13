@@ -24,5 +24,24 @@
 		c.id= :id
 		]]>
 	</query>
+	<query name="deleteCompanyById">
+	<query-param name=" id"  type="Integer"/>
+		<![CDATA[
+		DELETE	
+		FROM 
+			Company AS c 
+		WHERE 
+			c.id= :id
+		]]>
+	</query>
+	<query name="deleteAllCompanies">
+		<![CDATA[
+		DELETE
+		FROM
+			Company			
+		]]>
+	</query>
+	
+	
 	
 </hibernate-mapping>

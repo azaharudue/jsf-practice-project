@@ -11,21 +11,20 @@
 <h:head>
 	<meta charset="utf-8" name="viewport"
 		content="width=device-width, initial-scale=1" />
-	<title>Products</title>
+	<h:outputStylesheet name="style.css" library="css" />
+	<title>Companies</title>
 
 
 </h:head>
 
 <h:body>
 
-	<h:outputStylesheet name="style.css" library="css" />
 
-	<a href="index.xhtml">Go to Products page</a>
-	<br />
+
 	<!-- Use for a global message  -->
 	<p:growl id="growl" redisplay="false" showDetail="true" />
 
-	<h:form id="formProduct">
+	<h:form id="formCompany">
 
 		<p:toolbar>
 			<p:toolbarGroup>
@@ -36,7 +35,7 @@
 					oncomplete="PF('dlgCompanyWidgetVar').show()"
 					styleClass="ui-button-success " style="margin-right: .5rem">
 
-					<p:resetInput target=":formCompany:dlgCompany" />
+					<p:resetInput target=":formCompany:pnlManageCompanyContent" />
 				</p:commandButton>
 
 				<!-- Delete Company Button -->
@@ -53,6 +52,15 @@
 				</p:commandButton>
 
 
+			</p:toolbarGroup>
+			<!--toolbar caret menu -->
+			<p:toolbarGroup align="right" style="width: 10rem">
+				<p:splitButton value="Navigate">
+					<p:menuitem value="Product details" url="details.xhtml"
+						icon="pi pi-external-link" />
+					<p:menuitem value="Home(Products)" url="index.xhtml"
+						icon="pi pi-home" />
+				</p:splitButton>
 			</p:toolbarGroup>
 		</p:toolbar>
 
@@ -78,12 +86,11 @@
 				<div class="p-field">
 					<p:outputLabel for="companyLocation" value="Company Location" />
 					<p:inputText id="companyLocation"
-						value="#{companyView.selectedCompany.location}"
-						required="true" />
+						value="#{companyView.selectedCompany.location}" required="true" />
 				</div>
-				
+
 				<!-- //To do check: List of products to be added for a company? -->
-				
+
 			</p:outputPanel>
 
 			<f:facet name="footer">
@@ -92,21 +99,168 @@
 				<p:commandButton value="Save" icon="pi pi-check"
 					process="pnlManageCompanyContent @this"
 					action="#{companyView.saveCompany}"
-					update=" :formCompany:pnlManageCompanyContent" resetValues="true" />
+					update=" :formCompany:pnlManageCompanyContent"
+					>
+					<p:resetInput target="pnlManageCompanyContent" />
+				</p:commandButton>
 
 				<!-- cancel  -->
 				<p:commandButton value="Cancel" icon="pi pi-times"
 					onclick="PF('dlgCompanyWidgetVar').hide()"
-					class="ui-button-secondary" />
+					class="ui-button-secondary">
+					<p:resetInput target=":formCompany:pnlManageCompanyContent" />
+				</p:commandButton>
 			</f:facet>
 		</p:dialog>
 
 
 		<!-- Data table for companies  -->
+
+		<p:dataTable id="tbl-companies" widgetVar="tblCompaniesWidgetVar"
+			var="tblVarCompany" value="#{companyView.companies}" reflow="true"
+			selection="#{companyView.selectedCompanies}"
+			rowKey="#{tblVarCompany.id}" selectionPageOnly="false"
+			paginator="true" styleClass=" ui-datatable-companies" rows="10"
+			rowSelectMode="checkbox" paginatorPosition="bottom"
+			filteredValue="#{tblWidgetVarProducts}"
+			emptyMessage="No products found with given criteria">
+
+			<!-- Ajax events -->
+
+			<p:ajax event="rowEdit" listener="#{companyView.onRowEdit}"
+				update=":growl" />
+			<p:ajax event="rowEditCancel" listener="#{companyView.onRowCancel}"
+				update=":growl" />
+
+
+			<p:ajax event="rowSelect"
+				update=":formCompany:delete-companies-button" />
+			<p:ajax event="rowUnselect"
+				update=":formCompany:delete-companies-button" />
+			<p:ajax event="rowSelectCheckbox"
+				update=":formCompany:delete-companies-button" />
+			<p:ajax event="rowUnselectCheckbox"
+				update=":formCompany:delete-companies-button" />
+			<p:ajax event="toggleSelect"
+				update=":formCompany:delete-companies-button" />
+
+
+			<!-- Table header and global filter-->
+			<f:facet name="header">
+				<p:toolbar>
+					<p:toolbarGroup class="p-d-flex p-ai-center p-jc-between">
+						<h1>Companies</h1>
+						<span align="left"><h:outputText
+								value="Total available products :#{companyView.companies.size()}" /></span>
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+						<span><h:outputText value="Search from the table" /></span>
+						<span><p:inputText id="globalFilter"
+								onkeyup="PF('tblCompaniesWidgetVar').filter()"
+								style="width:20rem" placeholder="Enter keyword" /> </span>
+					</p:toolbarGroup>
+				</p:toolbar>
+
+			</f:facet>
+			<!-- Selection -->
+			<p:column selectionMode="multiple" exportable="false"
+				headerText="Select/Deselect All"
+				styleClass="leftAlignedColumnContent" />
+
+			<!-- id-->
+			<p:column headerText="ID" styleClass="leftAlignedColumnContent">
+				<h:outputText value="#{tblVarCompany.id}" />
+			</p:column>
+
+
+
+			<!-- Company name -->
+
+			<p:column headerText="Company" sortBy="#{tblVarCompany.name}"
+				filterBy="#{tblVarCompany.name}"
+				styleClass="leftAlignedColumnContent">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{tblVarCompany.name}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText value="#{tblVarCompany.name}" style="width:100%"
+							label="company name" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+			<!-- Company location -->
+
+			<p:column headerText="Company"
+				sortBy="#{tblVarProductCompany.location}"
+				filterBy="#{tblVarProduct.company.location}"
+				styleClass="leftAlignedColumnContent">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{tblVarCompany.location}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText value="#{tblVarCompany.location}" style="width:100%"
+							label="company location" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+
+			<!-- Edit pen -->
+			<p:column styleClass="centeredColumnContent"
+				headerText="Edit company(*ies)">
+
+
+				<p:rowEditor id="editrows" editTitle="Edit Row" icon="pi pi-pencil"
+					cancelTitle="Cancel Edit" saveTitle="Save Row" />
+			</p:column>
+
+			<p:column styleClass="centeredColumnContent"
+				headerText="Delete product(s)">
+				<p:commandButton class="ui-button-warning rounded-button"
+					icon="pi pi-trash" process="@this"
+					oncomplete="PF('dlgDeleteCompany').show()">
+
+					<f:setPropertyActionListener value="#{tblVarCompany}"
+						target="#{companyView.selectedCompany}" />
+				</p:commandButton>
+
+
+
+
+			</p:column>
+
+
+		</p:dataTable>
+
+		<p:confirmDialog widgetVar="dlgDeleteCompany" showEffect="fade"
+			width="300" message="Delete the product?" header="Confirm"
+			severity="warn">
+
+			<p:commandButton value="Yes" icon="pi pi-check" process="@this"
+				action="#{companyView.deleteCompany}"
+				oncomplete="PF('dlgDeleteCompany').hide()" />
+
+			<p:commandButton value="No" type="button"
+				styleClass="ui-button-secondary" icon="pi pi-times"
+				onclick="PF('dlgDeleteCompany').hide()" />
+
+		</p:confirmDialog>
+
+		<p:confirmDialog global="true" showEffect="fade" width="300">
+			<p:commandButton value="Yes" type="button"
+				styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+			<p:commandButton value="No" type="button"
+				styleClass="ui-confirmdialog-no ui-button-secondary"
+				icon="pi pi-times" />
+		</p:confirmDialog>
+
 		<!-- TO DO Features. -->
 		<!-- 1.  (Dashboard) which company has how many products  -->
 		<!-- 2.  (Geo Map) for company locations -->
-	
+
 
 
 	</h:form>

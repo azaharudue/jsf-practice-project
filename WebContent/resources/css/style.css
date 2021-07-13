@@ -17,3 +17,13 @@ td.centeredColumnContent{
 td.leftAlignedColumnContent{
 	text-align: left;
 }
+.ui-toolbar-group-left .ui-button-danger {
+	background-color: #ff0000;
+}
+
+.ui-toolbar-group-left .ui-button-danger.ui-state-hover {
+	background-color: #ff0000;
+}
+.ui-button.ui-button-text-only.button-company{	  
+	    float:right;
+}

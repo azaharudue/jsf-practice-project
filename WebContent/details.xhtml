@@ -9,7 +9,16 @@
 	<h1>Detail view of products</h1>
 </h:head>
 <h:body>
-	<a href="index.xhtml"> Back to Product list </a>
+<p:toolbar>
+		<p:toolbarGroup align="right">
+				<p:splitButton value="Navigate">
+					<p:menuitem value="Products" url="index.xhtml"
+						icon="pi pi-home" />
+					<p:menuitem value="Companies" url="companies.xhtml"
+						icon="pi pi-external-link" />
+				</p:splitButton>
+			</p:toolbarGroup>
+		</p:toolbar>
 	<br />
 	<div class="card">
 

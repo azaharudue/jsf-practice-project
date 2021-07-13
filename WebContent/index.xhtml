@@ -20,7 +20,7 @@
 
 	<h:outputStylesheet name="style.css" library="css" />
 
-	<a href="details.xhtml">Go to Product details page</a>
+
 	<br />
 	<!-- Use for a global message  -->
 	<p:growl id="growl" redisplay="false" showDetail="true" />
@@ -51,8 +51,15 @@
 						message="Delete the selected products?"
 						icon="pi pi-exclamation-triangle" />
 				</p:commandButton>
-
-
+			</p:toolbarGroup>
+			<!--toolbar caret menu -->
+			<p:toolbarGroup align="right">
+				<p:splitButton value="Navigate">
+					<p:menuitem value="Product details" url="details.xhtml"
+						icon="pi pi-external-link" />
+					<p:menuitem value="Companies" url="companies.xhtml"
+						icon="pi pi-external-link" />
+				</p:splitButton>
 			</p:toolbarGroup>
 		</p:toolbar>
 
@@ -84,18 +91,15 @@
 					</p:inputNumber>
 				</div>
 				<!-- company name -->
-				<div class="p-field">
-					<p:outputLabel for="companyName" value="Company Name" />
-					<p:inputText id="companyName"
-						value="#{basicView.selectedProduct.company.name}" required="true" />
+				<div class="p-field p-col-12 p-md-4">
+					<p:outputLabel for="@next" value="Company Name" />
+					<p:autoComplete id="companyName"
+						completeMethod="#{basicView.completeCompany}" value="#{basicView.selectedProduct.company}"
+						var="varCompany" itemLabel="#{varCompany.name}"
+						itemValue="#{varCompany}" converter=""
+						forceSelection="true" scrollHeight="150" required="true" />
 				</div>
-				<!-- company name -->
-				<div class="p-field">
-					<p:outputLabel for="companyLocation" value="Company Location" />
-					<p:inputText id="companyLocation"
-						value="#{basicView.selectedProduct.company.location}"
-						required="true" />
-				</div>
+			
 			</p:outputPanel>
 
 			<f:facet name="footer">
@@ -109,8 +113,7 @@
 				<!-- cancel  -->
 				<p:commandButton value="Cancel" icon="pi pi-times"
 					onclick="PF('dlgProductWidgetVar').hide()"
-					update= ":formProduct:dlgProduct"
-					class="ui-button-secondary" />
+					update=":formProduct:dlgProduct" class="ui-button-secondary" />
 			</f:facet>
 		</p:dialog>
 
@@ -120,12 +123,12 @@
 
 			<p:dataTable id="tblProduct" value="#{basicView.products}"
 				rowKey="#{tblVarProduct.id}" var="tblVarProduct"
-				widgetVar="tblWgtVarProducts"
+				widgetVar="tblWidgetVarProducts"
 				selection="#{basicView.selectedProducts}" editable="true"
 				selectionPageOnly="false" paginator="true"
 				styleClass=" ui-datatable-products" rows="10"
 				rowSelectMode="checkbox" paginatorPosition="bottom" reflow="true"
-				filteredValue="#{tblWgtVarProducts}"
+				filteredValue="#{tblWidgetVarProducts}"
 				emptyMessage="No products found with given criteria">
 
 				<!-- Ajax events -->
