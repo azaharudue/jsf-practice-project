@@ -3,14 +3,13 @@
  */
 package main.java.daoImpl;
 
-import java.io.Serializable;
 import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
-import main.java.dao.ProductDetailDao;
+import main.java.dao.GenericDao;
 import main.java.entities.ProductDetail;
 import main.java.utils.SessionUtils;
 
@@ -18,13 +17,13 @@ import main.java.utils.SessionUtils;
  * @author azahar
  *
  */
-public class ProductDetailDaoImpl implements ProductDetailDao<ProductDetail, Serializable>
+public class ProductDetailDaoImpl implements GenericDao<ProductDetail, Long>
 {
 	private Session session = null;
 	private Transaction tx = null;
 
 	@Override
-	public void persist(final ProductDetail productDetaill)
+	public void save(final ProductDetail productDetaill)
 	{
 		try
 		{
@@ -79,7 +78,7 @@ public class ProductDetailDaoImpl implements ProductDetailDao<ProductDetail, Ser
 	}
 
 	@Override
-	public ProductDetail findById(final Serializable id)
+	public ProductDetail findById(final Long id)
 	{
 		try
 		{

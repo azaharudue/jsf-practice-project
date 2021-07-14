@@ -11,9 +11,8 @@ import org.hibernate.validator.constraints.Length;
 /**
  * @author azahar copyright (c) 2021
  */
-public class Product
+public class Product extends AbstractEntity
 {
-	private Integer id;
 
 	@NotBlank
 	@Length(min = 3, max = 255)
@@ -47,41 +46,22 @@ public class Product
 	}
 
 	/**
-	 * @param id
+	 *
 	 * @param name
-	 * @param price
-	 * @param productDetails
+	 * @param price *
 	 * @param company
 	 */
-	public Product(final Integer id, final String name, final BigDecimal price, final Set<ProductDetail> productDetails, final Company company)
+	public Product(final String name, final BigDecimal price, final Company company)
 	{
-		this.id = id;
 		this.name = name;
 		this.price = price;
-		this.productDetails = productDetails;
 		this.company = company;
 	}
 
 	@Override
 	public Product clone()
 	{
-		return new Product(this.getId(), this.getName(), this.price, this.getProductDetails(), this.getCompany());
-	}
-
-	/**
-	 * @return the id
-	 */
-	public Integer getId()
-	{
-		return this.id;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(final Integer id)
-	{
-		this.id = id;
+		return new Product(this.getName(), this.price, this.getCompany());
 	}
 
 	/**

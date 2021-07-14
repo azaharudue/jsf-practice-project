@@ -3,14 +3,13 @@
  */
 package main.java.daoImpl;
 
-import java.io.Serializable;
 import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
-import main.java.dao.CompanyDao;
+import main.java.dao.GenericDao;
 import main.java.entities.Company;
 import main.java.utils.SessionUtils;
 
@@ -18,14 +17,17 @@ import main.java.utils.SessionUtils;
  * @author azahar
  *
  */
-public class CompanyDaoImpl implements CompanyDao<Company, Serializable> {
+public class CompanyDaoImpl implements GenericDao<Company, Long>
+{
 	private Session session = null;
 	private Transaction tx = null;
 
 	@Override
-	public void delete(final Company company) {
+	public void delete(final Company company)
+	{
 
-		try {
+		try
+		{
 			this.session = SessionUtils.getSessionFactory().openSession();
 			this.tx = this.session.beginTransaction();
 			// Uses session.delete()
@@ -40,10 +42,14 @@ public class CompanyDaoImpl implements CompanyDao<Company, Serializable> {
 			query.executeUpdate();
 			this.tx.commit();
 
-		} catch (final Exception ex) {
+		}
+		catch (final Exception ex)
+		{
 			ex.printStackTrace();
 			this.tx.rollback();
-		} finally {
+		}
+		finally
+		{
 			this.session.close();
 		}
 
@@ -54,8 +60,10 @@ public class CompanyDaoImpl implements CompanyDao<Company, Serializable> {
 	 *
 	 */
 	@Override
-	public void deleteAll() {
-		try {
+	public void deleteAll()
+	{
+		try
+		{
 			this.session = SessionUtils.getSessionFactory().openSession();
 			this.tx = this.session.beginTransaction();
 			// Gets the hql string and use Hql
@@ -64,19 +72,25 @@ public class CompanyDaoImpl implements CompanyDao<Company, Serializable> {
 			this.session.createNamedQuery("deleteAllCompanies").executeUpdate();
 			this.tx.commit();
 
-		} catch (final Exception ex) {
+		}
+		catch (final Exception ex)
+		{
 			ex.printStackTrace();
 			this.tx.rollback();
-		} finally {
+		}
+		finally
+		{
 			this.session.close();
 		}
 
 	}
 
 	@Override
-	public List<Company> findAll() {
+	public List<Company> findAll()
+	{
 
-		try {
+		try
+		{
 			this.session = SessionUtils.getSessionFactory().openSession();
 			this.tx = this.session.beginTransaction();
 
@@ -100,10 +114,14 @@ public class CompanyDaoImpl implements CompanyDao<Company, Serializable> {
 				System.out.println("\t|" + company.getName() + "\t\t" + company.getLocation() + "|");
 
 			return companies;
-		} catch (final Exception ex) {
+		}
+		catch (final Exception ex)
+		{
 			ex.printStackTrace();
 			this.tx.rollback();
-		} finally {
+		}
+		finally
+		{
 			this.session.close();
 		}
 		return null;
@@ -115,8 +133,10 @@ public class CompanyDaoImpl implements CompanyDao<Company, Serializable> {
 	 * Uses HQL
 	 */
 	@Override
-	public Company findById(final Serializable id) {
-		try {
+	public Company findById(final Long id)
+	{
+		try
+		{
 			this.session = SessionUtils.getSessionFactory().openSession();
 			this.tx = this.session.beginTransaction();
 
@@ -131,12 +151,16 @@ public class CompanyDaoImpl implements CompanyDao<Company, Serializable> {
 			System.out.println(company);
 			return company;
 
-		} catch (final Exception ex) {
+		}
+		catch (final Exception ex)
+		{
 			System.out.println("Company  with the id " + id + " not found!");
 			ex.printStackTrace();
 
 			this.tx.rollback();
-		} finally {
+		}
+		finally
+		{
 			this.session.close();
 		}
 		return null;
@@ -146,20 +170,25 @@ public class CompanyDaoImpl implements CompanyDao<Company, Serializable> {
 	 * Persist an Object
 	 */
 	@Override
-	public void save(final Company company) {
-		try {
+	public void save(final Company company)
+	{
+		try
+		{
 			this.session = SessionUtils.getSessionFactory().openSession();
 			this.tx = this.session.beginTransaction();
 			// We can use sssion.evict() for a detcahed instance.
 			// this.session.persist(product);
-			this.session.save(company);
-
+			this.session.saveOrUpdate(company);
 			this.tx.commit();
 
-		} catch (final Exception ex) {
+		}
+		catch (final Exception ex)
+		{
 			ex.printStackTrace();
 			this.tx.rollback();
-		} finally {
+		}
+		finally
+		{
 			this.session.close();
 		}
 
@@ -170,8 +199,10 @@ public class CompanyDaoImpl implements CompanyDao<Company, Serializable> {
 	 *
 	 */
 	@Override
-	public void update(final Company company) {
-		try {
+	public void update(final Company company)
+	{
+		try
+		{
 			this.session = SessionUtils.getSessionFactory().openSession();
 			this.tx = this.session.beginTransaction();
 			// Gets the hql string
@@ -181,10 +212,14 @@ public class CompanyDaoImpl implements CompanyDao<Company, Serializable> {
 			this.session.saveOrUpdate(company);
 			this.tx.commit();
 
-		} catch (final Exception ex) {
+		}
+		catch (final Exception ex)
+		{
 			ex.printStackTrace();
 			this.tx.rollback();
-		} finally {
+		}
+		finally
+		{
 			this.session.close();
 		}
 

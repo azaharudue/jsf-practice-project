@@ -8,12 +8,14 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.RowEditEvent;
 
+import main.java.configs.GenericConverter;
 import main.java.daoImpl.CompanyDaoImpl;
 import main.java.daoImpl.ProductDaoImpl;
 import main.java.entities.Company;
@@ -30,6 +32,8 @@ public class ProductBean implements Serializable
 
 	private final ProductDaoImpl productDAO;
 
+	private final Converter<Company> companyConverter;
+
 	private List<Product> products = new ArrayList<Product>();
 
 	private Product selectedProduct;
@@ -44,6 +48,14 @@ public class ProductBean implements Serializable
 
 		this.productDAO = new ProductDaoImpl();
 		this.companyDAO = new CompanyDaoImpl();
+		this.companyConverter = new GenericConverter<>(this.companyDAO);
+	}
+
+	@PostConstruct
+	public void init()
+	{
+		this.products = this.productDAO.findAll();
+
 	}
 
 	public void deleteProduct()
@@ -125,6 +137,14 @@ public class ProductBean implements Serializable
 		this.company = company;
 	}
 
+	/**
+	 * @return the companyConverter
+	 */
+	public Converter<Company> getCompanyConverter()
+	{
+		return this.companyConverter;
+	}
+
 	public boolean hasSelectedProducts()
 	{
 		return (this.selectedProducts != null) && !this.selectedProducts.isEmpty();
@@ -153,13 +173,6 @@ public class ProductBean implements Serializable
 	{
 		this.selectedProduct = new Product();
 		this.selectedProduct.setCompany(new Company());
-	}
-
-	@PostConstruct
-	public void init()
-	{
-		this.products = this.productDAO.findAll();
-
 	}
 
 	public String saveProduct()
@@ -224,16 +237,16 @@ public class ProductBean implements Serializable
 	 * @param userInput
 	 *
 	 * @return
-	 * 
+	 *
 	 * private List<Company> checkMatches(final String userInput) {
-	 * 
+	 *
 	 * final List<Company> companies = this.companyDAO.findAll(); return
 	 * companies.stream().filter(t ->
 	 * t.getName().toLowerCase().contains(userInput)).collect(Collectors.toList(
 	 * )); }
 	 *
-	 * 
-	 * 
+	 *
+	 *
 	 * public List<Company> completeCompanyLocation(final String userInput) {
 	 * final List<String> locationList = new ArrayList<>(); final String
 	 * userInputLowerCase = userInput.toLowerCase();

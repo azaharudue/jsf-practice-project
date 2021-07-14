@@ -99,8 +99,7 @@
 				<p:commandButton value="Save" icon="pi pi-check"
 					process="pnlManageCompanyContent @this"
 					action="#{companyView.saveCompany}"
-					update=" :formCompany:pnlManageCompanyContent"
-					>
+					update=" :formCompany:pnlManageCompanyContent">
 					<p:resetInput target="pnlManageCompanyContent" />
 				</p:commandButton>
 
@@ -179,44 +178,34 @@
 			<p:column headerText="Company" sortBy="#{tblVarCompany.name}"
 				filterBy="#{tblVarCompany.name}"
 				styleClass="leftAlignedColumnContent">
-				<p:cellEditor>
-					<f:facet name="output">
-						<h:outputText value="#{tblVarCompany.name}" />
-					</f:facet>
-					<f:facet name="input">
-						<p:inputText value="#{tblVarCompany.name}" style="width:100%"
-							label="company name" />
-					</f:facet>
-				</p:cellEditor>
+				<h:outputText value="#{tblVarCompany.name}" />
+
 			</p:column>
 
 			<!-- Company location -->
 
 			<p:column headerText="Company"
-				sortBy="#{tblVarProductCompany.location}"
-				filterBy="#{tblVarProduct.company.location}"
+				sortBy="#{tblVarCompany.location}"
+				filterBy="#{tblVarCompany.location}"
 				styleClass="leftAlignedColumnContent">
-				<p:cellEditor>
-					<f:facet name="output">
-						<h:outputText value="#{tblVarCompany.location}" />
-					</f:facet>
-					<f:facet name="input">
-						<p:inputText value="#{tblVarCompany.location}" style="width:100%"
-							label="company location" />
-					</f:facet>
-				</p:cellEditor>
+				<h:outputText value="#{tblVarCompany.location}" />
+
 			</p:column>
 
 
 			<!-- Edit pen -->
-			<p:column styleClass="centeredColumnContent"
-				headerText="Edit company(*ies)">
-
-
-				<p:rowEditor id="editrows" editTitle="Edit Row" icon="pi pi-pencil"
-					cancelTitle="Cancel Edit" saveTitle="Save Row" />
+			<p:column styleClass="centeredColumnContent">
+				<p:commandButton icon="pi pi-pencil" 
+								process="@this"
+								update=":formCompany:pnlManageCompanyContent"
+                                oncomplete="PF('dlgCompanyWidgetVar').show()"
+                                styleClass="edit-button rounded-button ui-button-success" >
+                    <f:setPropertyActionListener value="#{tblVarCompany}" target="#{companyView.selectedCompany}"/>
+                    <p:resetInput target=":formCompany:pnlManageCompanyContent"/>
+                </p:commandButton>                
+               
 			</p:column>
-
+<!-- Delete column -->
 			<p:column styleClass="centeredColumnContent"
 				headerText="Delete product(s)">
 				<p:commandButton class="ui-button-warning rounded-button"

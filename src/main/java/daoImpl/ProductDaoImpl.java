@@ -1,29 +1,27 @@
 
 package main.java.daoImpl;
 
-/**
- * @author azahar
- */
-
-import java.io.Serializable;
 import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
-import main.java.dao.ProductDao;
+import main.java.dao.GenericDao;
 import main.java.entities.Product;
 import main.java.utils.SessionUtils;
 
-public class ProductDaoImpl implements ProductDao<Product, Serializable> {
+public class ProductDaoImpl implements GenericDao<Product, Long>
+{
 	private Session session = null;
 	private Transaction tx = null;
 
 	@Override
-	public void delete(final Product product) {
+	public void delete(final Product product)
+	{
 
-		try {
+		try
+		{
 			this.session = SessionUtils.getSessionFactory().openSession();
 			this.tx = this.session.beginTransaction();
 			// Uses session.delete()
@@ -38,10 +36,14 @@ public class ProductDaoImpl implements ProductDao<Product, Serializable> {
 			query.executeUpdate();
 			this.tx.commit();
 
-		} catch (final Exception ex) {
+		}
+		catch (final Exception ex)
+		{
 			ex.printStackTrace();
 			this.tx.rollback();
-		} finally {
+		}
+		finally
+		{
 			this.session.close();
 		}
 
@@ -52,8 +54,10 @@ public class ProductDaoImpl implements ProductDao<Product, Serializable> {
 	 *
 	 */
 	@Override
-	public void deleteAll() {
-		try {
+	public void deleteAll()
+	{
+		try
+		{
 			this.session = SessionUtils.getSessionFactory().openSession();
 			this.tx = this.session.beginTransaction();
 			// Gets the hql string and use Hql
@@ -62,19 +66,25 @@ public class ProductDaoImpl implements ProductDao<Product, Serializable> {
 			this.session.createNamedQuery("deleteAllProducts").executeUpdate();
 			this.tx.commit();
 
-		} catch (final Exception ex) {
+		}
+		catch (final Exception ex)
+		{
 			ex.printStackTrace();
 			this.tx.rollback();
-		} finally {
+		}
+		finally
+		{
 			this.session.close();
 		}
 
 	}
 
 	@Override
-	public List<Product> findAll() {
+	public List<Product> findAll()
+	{
 
-		try {
+		try
+		{
 			this.session = SessionUtils.getSessionFactory().openSession();
 			this.tx = this.session.beginTransaction();
 
@@ -98,10 +108,14 @@ public class ProductDaoImpl implements ProductDao<Product, Serializable> {
 				System.out.println("\t|" + product.getName() + "\t\t" + product.getPrice() + "|");
 
 			return products;
-		} catch (final Exception ex) {
+		}
+		catch (final Exception ex)
+		{
 			ex.printStackTrace();
 			this.tx.rollback();
-		} finally {
+		}
+		finally
+		{
 			this.session.close();
 		}
 		return null;
@@ -113,8 +127,10 @@ public class ProductDaoImpl implements ProductDao<Product, Serializable> {
 	 * Uses HQL
 	 */
 	@Override
-	public Product findById(final Serializable id) {
-		try {
+	public Product findById(final Long id)
+	{
+		try
+		{
 			this.session = SessionUtils.getSessionFactory().openSession();
 			this.tx = this.session.beginTransaction();
 			/**
@@ -135,12 +151,16 @@ public class ProductDaoImpl implements ProductDao<Product, Serializable> {
 			System.out.println(product);
 			return product;
 
-		} catch (final Exception ex) {
+		}
+		catch (final Exception ex)
+		{
 			System.out.println("Product  with the id " + id + " not found!");
 			ex.printStackTrace();
 
 			this.tx.rollback();
-		} finally {
+		}
+		finally
+		{
 			this.session.close();
 		}
 		return null;
@@ -150,20 +170,26 @@ public class ProductDaoImpl implements ProductDao<Product, Serializable> {
 	 * Persist an Object
 	 */
 	@Override
-	public void save(final Product product) {
-		try {
+	public void save(final Product product)
+	{
+		try
+		{
 			this.session = SessionUtils.getSessionFactory().openSession();
 			this.tx = this.session.beginTransaction();
 			// We can use sssion.evict() for a detcahed instance.
 			// this.session.persist(product);
-			this.session.save(product);
+			this.session.saveOrUpdate(product);
 
 			this.tx.commit();
 
-		} catch (final Exception ex) {
+		}
+		catch (final Exception ex)
+		{
 			ex.printStackTrace();
 			this.tx.rollback();
-		} finally {
+		}
+		finally
+		{
 			this.session.close();
 		}
 
@@ -174,8 +200,10 @@ public class ProductDaoImpl implements ProductDao<Product, Serializable> {
 	 *
 	 */
 	@Override
-	public void update(final Product product) {
-		try {
+	public void update(final Product product)
+	{
+		try
+		{
 			this.session = SessionUtils.getSessionFactory().openSession();
 			this.tx = this.session.beginTransaction();
 			// Gets the hql string
@@ -185,10 +213,14 @@ public class ProductDaoImpl implements ProductDao<Product, Serializable> {
 			this.session.saveOrUpdate(product);
 			this.tx.commit();
 
-		} catch (final Exception ex) {
+		}
+		catch (final Exception ex)
+		{
 			ex.printStackTrace();
 			this.tx.rollback();
-		} finally {
+		}
+		finally
+		{
 			this.session.close();
 		}
 

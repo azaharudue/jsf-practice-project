@@ -3,7 +3,7 @@
                                    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
  <class name="main.java.entities.Product" table="product">
-		   <id name="id" type="java.lang.Integer">
+		   <id name="id" type="java.lang.Long">
             <column name="id" />
             <generator class="identity" />
         </id>
@@ -14,7 +14,7 @@
 		  				 <key column="product_id" not-null="true"></key>
 			  			 <one-to-many class="main.java.entity.ProductDetail"></one-to-many>
 		 </set> -->
-		  <many-to-one name="company" class="main.java.entities.Company"   column="companyID"   fetch="select"  lazy="false"  />
+		  <many-to-one name="company" class="main.java.entities.Company"   column="companyID"   fetch="select"   lazy="false"/>
  
  </class>
 </hibernate-mapping>

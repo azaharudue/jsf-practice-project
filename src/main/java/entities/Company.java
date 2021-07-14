@@ -13,9 +13,8 @@ import org.hibernate.validator.constraints.Length;
  * @author Azahar Hossain
  *
  */
-public class Company
+public class Company extends AbstractEntity
 {
-	private int id;
 
 	@NotBlank
 	@Length(min = 3, max = 255)
@@ -60,7 +59,7 @@ public class Company
 	 * @param location
 	 * @param products
 	 */
-	public Company(final int id, final String name, final String location, final List<Product> products)
+	public Company(final Long id, final String name, final String location, final List<Product> products)
 	{
 		this.id = id;
 		this.name = name;
@@ -77,10 +76,6 @@ public class Company
 	/*
 	 * Getters & Setters
 	 */
-	public int getId()
-	{
-		return this.id;
-	}
 
 	public String getName()
 	{
@@ -95,11 +90,6 @@ public class Company
 	public List<Product> getProducts()
 	{
 		return this.products;
-	}
-
-	public void setId(final int id)
-	{
-		this.id = id;
 	}
 
 	public void setName(final String name)

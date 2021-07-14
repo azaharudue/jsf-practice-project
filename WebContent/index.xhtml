@@ -94,12 +94,14 @@
 				<div class="p-field p-col-12 p-md-4">
 					<p:outputLabel for="@next" value="Company Name" />
 					<p:autoComplete id="companyName"
-						completeMethod="#{basicView.completeCompany}" value="#{basicView.selectedProduct.company}"
-						var="varCompany" itemLabel="#{varCompany.name}"
-						itemValue="#{varCompany}" converter=""
-						forceSelection="true" scrollHeight="150" required="true" />
+						completeMethod="#{basicView.completeCompany}"
+						value="#{basicView.selectedProduct.company}" required="true" 
+						converter="#{basicView.companyConverter}" var="varCompany"
+						itemLabel="#{varCompany.name}" itemValue="#{varCompany}"
+						forceSelection="true" scrollHeight="150" />
+
 				</div>
-			
+
 			</p:outputPanel>
 
 			<f:facet name="footer">

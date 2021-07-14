@@ -7,9 +7,8 @@ package main.java.entities;
  * @author azahar
  *
  */
-public class ProductDetail
+public class ProductDetail extends AbstractEntity
 {
-	private int id;
 
 	private String value;
 
@@ -39,26 +38,10 @@ public class ProductDetail
 	 * @param value
 	 * @param product
 	 */
-	public ProductDetail(final int id, final String value, final Product product)
+	public ProductDetail(final Long id, final String value, final Product product)
 	{
 		this.id = id;
 		this.value = value;
-	}
-
-	/**
-	 * @return the id
-	 */
-	public int getId()
-	{
-		return this.id;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(final int id)
-	{
-		this.id = id;
 	}
 
 	/**
