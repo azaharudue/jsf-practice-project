@@ -89,7 +89,7 @@
 						value="#{companyView.selectedCompany.location}" required="true" />
 				</div>
 
-				<!-- //To do check: List of products to be added for a company? -->
+				
 
 			</p:outputPanel>
 
@@ -116,20 +116,18 @@
 		<!-- Data table for companies  -->
 
 		<p:dataTable id="tbl-companies" widgetVar="tblCompaniesWidgetVar"
-			var="tblVarCompany" value="#{companyView.companies}" reflow="true"
+			var="tblVarCompany" value="#{companyView.companyLazyModel}" reflow="true"
 			selection="#{companyView.selectedCompanies}"
 			rowKey="#{tblVarCompany.id}" selectionPageOnly="false"
 			paginator="true" styleClass=" ui-datatable-companies" rows="10"
 			rowSelectMode="checkbox" paginatorPosition="bottom"
-			filteredValue="#{tblWidgetVarProducts}"
-			emptyMessage="No products found with given criteria">
+			paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+            rowsPerPageTemplate="5,10,15"
+			sortOrder="ascending" lazy="true"			
+			filteredValue="#{tblCompaniesWidgetVar}"
+			emptyMessage="No companies found with given criteria" >
 
 			<!-- Ajax events -->
-
-			<p:ajax event="rowEdit" listener="#{companyView.onRowEdit}"
-				update=":growl" />
-			<p:ajax event="rowEditCancel" listener="#{companyView.onRowCancel}"
-				update=":growl" />
 
 
 			<p:ajax event="rowSelect"
@@ -150,7 +148,7 @@
 					<p:toolbarGroup class="p-d-flex p-ai-center p-jc-between">
 						<h1>Companies</h1>
 						<span align="left"><h:outputText
-								value="Total available products :#{companyView.companies.size()}" /></span>
+								value="Total available companies :#{companyView.companyLazyModel.rowCount}" /></span>
 					</p:toolbarGroup>
 					<p:toolbarGroup align="right">
 						<span><h:outputText value="Search from the table" /></span>
@@ -167,7 +165,7 @@
 				styleClass="leftAlignedColumnContent" />
 
 			<!-- id-->
-			<p:column headerText="ID" styleClass="leftAlignedColumnContent">
+			<p:column headerText="ID" styleClass="leftAlignedColumnContent" sortBy="#{tblVarCompany.id}">
 				<h:outputText value="#{tblVarCompany.id}" />
 			</p:column>
 
@@ -175,7 +173,7 @@
 
 			<!-- Company name -->
 
-			<p:column headerText="Company" sortBy="#{tblVarCompany.name}"
+			<p:column headerText="Company name" sortBy="#{tblVarCompany.name}"
 				filterBy="#{tblVarCompany.name}"
 				styleClass="leftAlignedColumnContent">
 				<h:outputText value="#{tblVarCompany.name}" />
@@ -184,7 +182,7 @@
 
 			<!-- Company location -->
 
-			<p:column headerText="Company"
+			<p:column headerText="Location"
 				sortBy="#{tblVarCompany.location}"
 				filterBy="#{tblVarCompany.location}"
 				styleClass="leftAlignedColumnContent">

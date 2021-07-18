@@ -49,6 +49,10 @@
     <extension>xhtml <!--{or the extension of file}--></extension>
     <mime-type>text/html</mime-type>
   </mime-mapping>
+  <mime-mapping>
+    <extension>woff</extension>
+    <mime-type>application/font-woff</mime-type>
+</mime-mapping>
 		<!-- primefaces -->
 		<context-param>
 			<param-name>primefaces.THEME</param-name>

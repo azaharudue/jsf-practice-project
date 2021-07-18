@@ -6,6 +6,7 @@ package main.java.beans;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -14,6 +15,9 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
 import org.primefaces.PrimeFaces;
+import org.primefaces.model.FilterMeta;
+import org.primefaces.model.LazyDataModel;
+import org.primefaces.model.SortOrder;
 
 import main.java.daoImpl.CompanyDaoImpl;
 import main.java.entities.Company;
@@ -25,31 +29,44 @@ import main.java.entities.Company;
 
 @Named("companyView")
 @ViewScoped
-public class CompanyBean implements Serializable
-{
+public class CompanyBean implements Serializable {
 	/**
 	 *
 	 */
 	private static final long serialVersionUID = -4337968391362680453L;
 
-	final CompanyDaoImpl companyDAO;
-
 	private List<Company> companies = new ArrayList<Company>();
 
-	private Company selectedCompany;
+	final CompanyDaoImpl companyDAO;
+
+	private LazyDataModel<Company> companyLazyModel;
 
 	private List<Company> selectedCompanies;
 
-	public CompanyBean()
-	{
+	private Company selectedCompany;
+
+	public CompanyBean() {
 		this.companyDAO = new CompanyDaoImpl();
 
 	}
 
-	@PostConstruct
-	public void init()
-	{
-		this.companies = this.companyDAO.findAll();
+	/**
+	 * Deletes selected company
+	 */
+	public void deleteCompany() {
+		try {
+			this.companies.remove(this.selectedCompany);
+			this.companyDAO.delete(this.selectedCompany);
+			this.selectedCompany = null;
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Company removed"));
+			PrimeFaces.current().ajax().update("growl", "formCompany:tbl-companies");
+			PrimeFaces.current().ajax().update("growl", "formCompany:tbl-companies");
+		} catch (final Exception e) {
+			e.printStackTrace(System.err);
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage("Company can not be removed, while products exists!"));
+
+		}
 
 	}
 
@@ -57,64 +74,7 @@ public class CompanyBean implements Serializable
 	 * Getters and setters
 	 */
 
-	/**
-	 * @return the companies
-	 */
-	public List<Company> getCompanies()
-	{
-		return this.companies;
-	}
-
-	/**
-	 * @param companies the companies to set
-	 */
-	public void setCompanies(final List<Company> companies)
-	{
-		this.companies = companies;
-	}
-
-	/**
-	 * @return the selectedCompany
-	 */
-	public Company getSelectedCompany()
-	{
-		return this.selectedCompany;
-	}
-
-	/**
-	 * @param selectedCompany the selectedCompany to set
-	 */
-	public void setSelectedCompany(final Company selectedCompany)
-	{
-		this.selectedCompany = selectedCompany;
-	}
-
-	/**
-	 * @return the selectedCompanies
-	 */
-	public List<Company> getSelectedCompanies()
-	{
-		return this.selectedCompanies;
-	}
-
-	/**
-	 * @param selectedCompanies the selectedCompanies to set
-	 */
-	public void setSelectedCompanies(final List<Company> selectedCompanies)
-	{
-		this.selectedCompanies = selectedCompanies;
-	}
-
-	/*
-	 * Other methods
-	 */
-	public void openNew()
-	{
-		this.selectedCompany = new Company();
-	}
-
-	public void deleteSelectedCompanies()
-	{
+	public void deleteSelectedCompanies() {
 		this.companies.removeAll(this.selectedCompanies);
 
 		for (final Company companyToBeDeleted : this.selectedCompanies)
@@ -128,36 +88,22 @@ public class CompanyBean implements Serializable
 	}
 
 	/**
-	 * Deletes selected company
+	 * @return the companies
 	 */
-	public void deleteCompany()
-	{
-		try
-		{
-			this.companies.remove(this.selectedCompany);
-			this.companyDAO.delete(this.selectedCompany);
-			this.selectedCompany = null;
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Company removed"));
-			PrimeFaces.current().ajax().update("growl", "formCompany:tbl-companies");
-			PrimeFaces.current().ajax().update("growl", "formCompany:tbl-companies");
-		}
-		catch (final Exception e)
-		{
-			e.printStackTrace(System.err);
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Company can not be removed, while products exists!"));
+	public List<Company> getCompanies() {
+		return this.companies;
+	}
 
-		}
-
+	public LazyDataModel<Company> getCompanyLazyModel() {
+		return this.companyLazyModel;
 	}
 
 	/**
 	 *
 	 * @return
 	 */
-	public String getDeleteButtonMessage()
-	{
-		if (this.hasSelectedCompanies())
-		{
+	public String getDeleteButtonMessage() {
+		if (this.hasSelectedCompanies()) {
 			final int size = this.selectedCompanies.size();
 			return size > 1 ? size + " companies selected" : "1 Company selected";
 		}
@@ -166,24 +112,93 @@ public class CompanyBean implements Serializable
 	}
 
 	/**
+	 * @return the selectedCompanies
+	 */
+	public List<Company> getSelectedCompanies() {
+		return this.selectedCompanies;
+	}
+
+	/**
+	 * @return the selectedCompany
+	 */
+	public Company getSelectedCompany() {
+		return this.selectedCompany;
+	}
+
+	/**
+	 *
+	 * @return true if companies were selected
+	 */
+	public boolean hasSelectedCompanies() {
+		return (this.selectedCompanies != null) && !this.selectedCompanies.isEmpty();
+	}
+
+	@PostConstruct
+	public void init() {
+		// this.companies = this.companyDAO.findAll();
+		this.companyLazyModel = new LazyDataModel<Company>() {
+
+			/**
+			 *
+			 */
+			private static final long serialVersionUID = -1105344323215332439L;
+
+			@Override
+			public int getRowCount() {
+
+				return CompanyBean.this.companyDAO.findAll().size();
+			}
+
+			@Override
+			public Company getRowData(final String rowKey) {
+				// TODO Auto-generated method stub
+				for (final Company c : CompanyBean.this.companies)
+					if (c.getId() == Long.valueOf(rowKey))
+						return c;
+				return null;
+			}
+
+			@Override
+			public Long getRowKey(final Company company) {
+				// TODO Auto-generated method stub
+				return company.getId();
+			}
+
+			@Override
+			public List<Company> load(final int first, final int pageSize, final String sortField,
+					final SortOrder sortOrder, final Map<String, FilterMeta> filterBy) {
+				this.setRowCount(this.getRowCount());
+				return CompanyBean.this.companyDAO.findPaged(first, pageSize, sortField,
+						SortOrder.ASCENDING.equals(sortOrder), filterBy);
+			}
+
+		};
+
+	}
+
+	/*
+	 * Other methods
+	 */
+	public void openNew() {
+		this.selectedCompany = new Company();
+	}
+
+	/**
 	 * Saves a company
 	 *
 	 * @return
 	 */
 
-	public String saveCompany()
-	{
-		try
-		{
+	public String saveCompany() {
+		try {
 			this.companyDAO.save(this.selectedCompany);
 			this.companies.add(this.selectedCompany);
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Company created!"));
 			PrimeFaces.current().executeScript("PF('dlgCompanyWidgetVar').hide()");
-		}
-		catch (final Exception e)
-		{
+		} catch (final Exception e) {
 
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getLocalizedMessage(), "Company not created!"));
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(e.getLocalizedMessage(), "Company not created!"));
 
 		}
 
@@ -191,12 +206,31 @@ public class CompanyBean implements Serializable
 	}
 
 	/**
-	 *
-	 * @return true if companies were selected
+	 * @param companies
+	 *            the companies to set
 	 */
-	public boolean hasSelectedCompanies()
-	{
-		return (this.selectedCompanies != null) && !this.selectedCompanies.isEmpty();
+	public void setCompanies(final List<Company> companies) {
+		this.companies = companies;
+	}
+
+	public void setCompanyLazyModel(final LazyDataModel<Company> companyLazyModel) {
+		this.companyLazyModel = companyLazyModel;
+	}
+
+	/**
+	 * @param selectedCompanies
+	 *            the selectedCompanies to set
+	 */
+	public void setSelectedCompanies(final List<Company> selectedCompanies) {
+		this.selectedCompanies = selectedCompanies;
+	}
+
+	/**
+	 * @param selectedCompany
+	 *            the selectedCompany to set
+	 */
+	public void setSelectedCompany(final Company selectedCompany) {
+		this.selectedCompany = selectedCompany;
 	}
 
 }

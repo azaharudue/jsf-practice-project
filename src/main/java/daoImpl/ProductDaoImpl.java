@@ -2,26 +2,25 @@
 package main.java.daoImpl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.primefaces.model.FilterMeta;
 
 import main.java.dao.GenericDao;
 import main.java.entities.Product;
 import main.java.utils.SessionUtils;
 
-public class ProductDaoImpl implements GenericDao<Product, Long>
-{
+public class ProductDaoImpl implements GenericDao<Product, Long> {
 	private Session session = null;
 	private Transaction tx = null;
 
 	@Override
-	public void delete(final Product product)
-	{
+	public void delete(final Product product) {
 
-		try
-		{
+		try {
 			this.session = SessionUtils.getSessionFactory().openSession();
 			this.tx = this.session.beginTransaction();
 			// Uses session.delete()
@@ -36,14 +35,10 @@ public class ProductDaoImpl implements GenericDao<Product, Long>
 			query.executeUpdate();
 			this.tx.commit();
 
-		}
-		catch (final Exception ex)
-		{
+		} catch (final Exception ex) {
 			ex.printStackTrace();
 			this.tx.rollback();
-		}
-		finally
-		{
+		} finally {
 			this.session.close();
 		}
 
@@ -54,10 +49,8 @@ public class ProductDaoImpl implements GenericDao<Product, Long>
 	 *
 	 */
 	@Override
-	public void deleteAll()
-	{
-		try
-		{
+	public void deleteAll() {
+		try {
 			this.session = SessionUtils.getSessionFactory().openSession();
 			this.tx = this.session.beginTransaction();
 			// Gets the hql string and use Hql
@@ -66,25 +59,19 @@ public class ProductDaoImpl implements GenericDao<Product, Long>
 			this.session.createNamedQuery("deleteAllProducts").executeUpdate();
 			this.tx.commit();
 
-		}
-		catch (final Exception ex)
-		{
+		} catch (final Exception ex) {
 			ex.printStackTrace();
 			this.tx.rollback();
-		}
-		finally
-		{
+		} finally {
 			this.session.close();
 		}
 
 	}
 
 	@Override
-	public List<Product> findAll()
-	{
+	public List<Product> findAll() {
 
-		try
-		{
+		try {
 			this.session = SessionUtils.getSessionFactory().openSession();
 			this.tx = this.session.beginTransaction();
 
@@ -108,14 +95,10 @@ public class ProductDaoImpl implements GenericDao<Product, Long>
 				System.out.println("\t|" + product.getName() + "\t\t" + product.getPrice() + "|");
 
 			return products;
-		}
-		catch (final Exception ex)
-		{
+		} catch (final Exception ex) {
 			ex.printStackTrace();
 			this.tx.rollback();
-		}
-		finally
-		{
+		} finally {
 			this.session.close();
 		}
 		return null;
@@ -127,10 +110,8 @@ public class ProductDaoImpl implements GenericDao<Product, Long>
 	 * Uses HQL
 	 */
 	@Override
-	public Product findById(final Long id)
-	{
-		try
-		{
+	public Product findById(final Long id) {
+		try {
 			this.session = SessionUtils.getSessionFactory().openSession();
 			this.tx = this.session.beginTransaction();
 			/**
@@ -151,18 +132,21 @@ public class ProductDaoImpl implements GenericDao<Product, Long>
 			System.out.println(product);
 			return product;
 
-		}
-		catch (final Exception ex)
-		{
+		} catch (final Exception ex) {
 			System.out.println("Product  with the id " + id + " not found!");
 			ex.printStackTrace();
 
 			this.tx.rollback();
-		}
-		finally
-		{
+		} finally {
 			this.session.close();
 		}
+		return null;
+	}
+
+	@Override
+	public List<Product> findPaged(final int first, final int pageSize, final String sortField, final boolean asc,
+			final Map<String, FilterMeta> filterBy) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -170,10 +154,8 @@ public class ProductDaoImpl implements GenericDao<Product, Long>
 	 * Persist an Object
 	 */
 	@Override
-	public void save(final Product product)
-	{
-		try
-		{
+	public void save(final Product product) {
+		try {
 			this.session = SessionUtils.getSessionFactory().openSession();
 			this.tx = this.session.beginTransaction();
 			// We can use sssion.evict() for a detcahed instance.
@@ -182,14 +164,10 @@ public class ProductDaoImpl implements GenericDao<Product, Long>
 
 			this.tx.commit();
 
-		}
-		catch (final Exception ex)
-		{
+		} catch (final Exception ex) {
 			ex.printStackTrace();
 			this.tx.rollback();
-		}
-		finally
-		{
+		} finally {
 			this.session.close();
 		}
 
@@ -200,10 +178,8 @@ public class ProductDaoImpl implements GenericDao<Product, Long>
 	 *
 	 */
 	@Override
-	public void update(final Product product)
-	{
-		try
-		{
+	public void update(final Product product) {
+		try {
 			this.session = SessionUtils.getSessionFactory().openSession();
 			this.tx = this.session.beginTransaction();
 			// Gets the hql string
@@ -213,14 +189,10 @@ public class ProductDaoImpl implements GenericDao<Product, Long>
 			this.session.saveOrUpdate(product);
 			this.tx.commit();
 
-		}
-		catch (final Exception ex)
-		{
+		} catch (final Exception ex) {
 			ex.printStackTrace();
 			this.tx.rollback();
-		}
-		finally
-		{
+		} finally {
 			this.session.close();
 		}
 
