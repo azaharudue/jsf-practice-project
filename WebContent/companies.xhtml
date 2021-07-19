@@ -31,7 +31,7 @@
 
 				<!-- Add new Product Button -->
 				<p:commandButton value="Add new company" icon="pi pi-plus"
-					action="#{companyView.openNew}" update="dlgCompany"
+					action="#{companyView.openNew}" update="dlgCompany, tblCompany"
 					oncomplete="PF('dlgCompanyWidgetVar').show()"
 					styleClass="ui-button-success " style="margin-right: .5rem">
 
@@ -115,16 +115,15 @@
 
 		<!-- Data table for companies  -->
 
-		<p:dataTable id="tbl-companies" widgetVar="tblCompaniesWidgetVar"
+		<p:dataTable id="tblCompany" widgetVar="tblCompaniesWidgetVar"
 			var="tblVarCompany" value="#{companyView.companyLazyModel}" reflow="true"
-			selection="#{companyView.selectedCompanies}"
+			selection="#{companyView.selectedCompany}" selectionMode="single"
 			rowKey="#{tblVarCompany.id}" selectionPageOnly="false"
 			paginator="true" styleClass=" ui-datatable-companies" rows="10"
 			rowSelectMode="checkbox" paginatorPosition="bottom"
 			paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
             rowsPerPageTemplate="5,10,15"
-			sortOrder="ascending" lazy="true"			
-			filteredValue="#{tblCompaniesWidgetVar}"
+			 lazy="true"			
 			emptyMessage="No companies found with given criteria" >
 
 			<!-- Ajax events -->
@@ -195,7 +194,7 @@
 			<p:column styleClass="centeredColumnContent">
 				<p:commandButton icon="pi pi-pencil" 
 								process="@this"
-								update=":formCompany:pnlManageCompanyContent"
+								update=":formCompany:dlgCompany"
                                 oncomplete="PF('dlgCompanyWidgetVar').show()"
                                 styleClass="edit-button rounded-button ui-button-success" >
                     <f:setPropertyActionListener value="#{tblVarCompany}" target="#{companyView.selectedCompany}"/>
