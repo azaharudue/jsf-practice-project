@@ -2,6 +2,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:cp="http://java.sun.com/jsf/composite/components"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
@@ -31,7 +32,7 @@
 
 				<!-- Add new Product Button -->
 				<p:commandButton value="Add new company" icon="pi pi-plus"
-					action="#{companyView.openNew}" update="dlgCompany"
+					action="#{companyView.openNew}" update="dlgCompanyAdd"
 					oncomplete="PF('dlgCompanyWidgetVar').show()"
 					styleClass="ui-button-success " style="margin-right: .5rem">
 
@@ -67,29 +68,20 @@
 
 		<!-- Modal for adding a new company -->
 
-		<p:dialog id="dlgCompany" header="Company Details" showEffect="fade"
-			modal="true" widgetVar="dlgCompanyWidgetVar" responsive="true">
+		<p:dialog id="dlgCompanyAdd" header="Company Details"
+			showEffect="fade" modal="true" widgetVar="dlgCompanyWidgetVar"
+			responsive="true">
 
 			<p:outputPanel id="pnlManageCompanyContent" class="ui-fluid"
-				rendered="#{ companyView.selectedCompany ne null}">
+				rendered="#{companyView.createdCompany ne null}">
 
 				<p:messages redisplay="true" />
 
 
-				<!-- company name -->
-				<div class="p-field">
-					<p:outputLabel for="companyName" value="Company Name" />
-					<p:inputText id="companyName"
-						value="#{companyView.selectedCompany.name}" required="true" />
-				</div>
-				<!-- company location -->
-				<div class="p-field">
-					<p:outputLabel for="companyLocation" value="Company Location" />
-					<p:inputText id="companyLocation"
-						value="#{companyView.selectedCompany.location}" required="true" />
-				</div>
+				<cp:customize companyName="#{companyView.createdCompany.name}"
+					companyLocation="#{companyView.createdCompany.location}" />
 
-				
+
 
 			</p:outputPanel>
 
@@ -98,7 +90,7 @@
 				<!-- save  -->
 				<p:commandButton value="Save" icon="pi pi-check"
 					process="pnlManageCompanyContent @this"
-					action="#{companyView.saveCompany}"
+					action="#{companyView.saveNewCompany}"
 					update=" :formCompany:pnlManageCompanyContent">
 					<p:resetInput target="pnlManageCompanyContent" />
 				</p:commandButton>
@@ -111,21 +103,57 @@
 				</p:commandButton>
 			</f:facet>
 		</p:dialog>
+		
+		<!-- Modal for updating  an existing company -->
 
+		<p:dialog id="dlgCompanyEdit" header="Company Details"
+			showEffect="fade" modal="true" widgetVar="dlgCompanyEditWidgetVar"
+			responsive="true">
+
+			<p:outputPanel id="pnlEditCompanyContent" class="ui-fluid"
+				rendered="#{companyView.selectedCompany ne null}">
+
+				<p:messages redisplay="true" />
+
+
+				<cp:customize companyName="#{companyView.selectedCompany.name}"
+					companyLocation="#{companyView.selectedCompany.location}" />
+
+
+
+			</p:outputPanel>
+
+			<f:facet name="footer">
+
+				<!-- save  -->
+				<p:commandButton value="Save" icon="pi pi-check"
+					process="pnlEditCompanyContent @this"
+					action="#{companyView.saveCompany}"
+					update=" :formCompany:pnlEditCompanyContent">
+					<p:resetInput target="pnlEditCompanyContent" />
+				</p:commandButton>
+
+				<!-- cancel  -->
+				<p:commandButton value="Cancel" icon="pi pi-times"
+					onclick="PF('dlgCompanyEditWidgetVar').hide()"
+					class="ui-button-secondary">
+					
+				</p:commandButton>
+			</f:facet>
+		</p:dialog>
 
 		<!-- Data table for companies  -->
 
 		<p:dataTable id="tbl-companies" widgetVar="tblCompaniesWidgetVar"
-			var="tblVarCompany" value="#{companyView.companyLazyModel}" reflow="true"
-			selection="#{companyView.selectedCompanies}"
+			var="tblVarCompany" value="#{companyView.companyLazyModel}"
+			reflow="true" selection="#{companyView.selectedCompanies}"
 			rowKey="#{tblVarCompany.id}" selectionPageOnly="false"
 			paginator="true" styleClass=" ui-datatable-companies" rows="10"
 			rowSelectMode="checkbox" paginatorPosition="bottom"
 			paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-            rowsPerPageTemplate="5,10,15"
-			sortOrder="ascending" lazy="true"			
+			rowsPerPageTemplate="5,10,15" sortOrder="ascending" lazy="true"
 			filteredValue="#{tblCompaniesWidgetVar}"
-			emptyMessage="No companies found with given criteria" >
+			emptyMessage="No companies found with given criteria">
 
 			<!-- Ajax events -->
 
@@ -165,7 +193,8 @@
 				styleClass="leftAlignedColumnContent" />
 
 			<!-- id-->
-			<p:column headerText="ID" styleClass="leftAlignedColumnContent" sortBy="#{tblVarCompany.id}">
+			<p:column headerText="ID" styleClass="leftAlignedColumnContent"
+				sortBy="#{tblVarCompany.id}">
 				<h:outputText value="#{tblVarCompany.id}" />
 			</p:column>
 
@@ -182,8 +211,7 @@
 
 			<!-- Company location -->
 
-			<p:column headerText="Location"
-				sortBy="#{tblVarCompany.location}"
+			<p:column headerText="Location" sortBy="#{tblVarCompany.location}"
 				filterBy="#{tblVarCompany.location}"
 				styleClass="leftAlignedColumnContent">
 				<h:outputText value="#{tblVarCompany.location}" />
@@ -193,17 +221,17 @@
 
 			<!-- Edit pen -->
 			<p:column styleClass="centeredColumnContent">
-				<p:commandButton icon="pi pi-pencil" 
-								process="@this"
-								update=":formCompany:pnlManageCompanyContent"
-                                oncomplete="PF('dlgCompanyWidgetVar').show()"
-                                styleClass="edit-button rounded-button ui-button-success" >
-                    <f:setPropertyActionListener value="#{tblVarCompany}" target="#{companyView.selectedCompany}"/>
-                    <p:resetInput target=":formCompany:pnlManageCompanyContent"/>
-                </p:commandButton>                
-               
+				<p:commandButton icon="pi pi-pencil" process="@this"
+					update=":formCompany:pnlEditCompanyContent"
+					oncomplete="PF('dlgCompanyEditWidgetVar').show()"
+					styleClass="edit-button rounded-button ui-button-success">
+					<f:setPropertyActionListener value="#{tblVarCompany}"
+						target="#{companyView.selectedCompany}" />
+					<p:resetInput target=":formCompany:pnlEditCompanyContent" />
+				</p:commandButton>
+
 			</p:column>
-<!-- Delete column -->
+			<!-- Delete column -->
 			<p:column styleClass="centeredColumnContent"
 				headerText="Delete product(s)">
 				<p:commandButton class="ui-button-warning rounded-button"

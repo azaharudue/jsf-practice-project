@@ -41,6 +41,8 @@ public class CompanyBean implements Serializable {
 
 	private LazyDataModel<Company> companyLazyModel;
 
+	private Company createdCompany;
+
 	private List<Company> selectedCompanies;
 
 	private Company selectedCompany;
@@ -96,6 +98,10 @@ public class CompanyBean implements Serializable {
 
 	public LazyDataModel<Company> getCompanyLazyModel() {
 		return this.companyLazyModel;
+	}
+
+	public Company getCreatedCompany() {
+		return this.createdCompany;
 	}
 
 	/**
@@ -180,7 +186,7 @@ public class CompanyBean implements Serializable {
 	 * Other methods
 	 */
 	public void openNew() {
-		this.selectedCompany = new Company();
+		this.createdCompany = new Company();
 	}
 
 	/**
@@ -193,6 +199,29 @@ public class CompanyBean implements Serializable {
 		try {
 			this.companyDAO.save(this.selectedCompany);
 			this.companies.add(this.selectedCompany);
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Company Updated!"));
+			PrimeFaces.current().executeScript("PF('dlgCompanyWidgetVar').hide()");
+		} catch (final Exception e) {
+
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(e.getLocalizedMessage(), "Company not updated!"));
+
+		}
+
+		return null;
+	}
+
+	/**
+	 * Saves a company
+	 *
+	 * @return
+	 */
+
+	public String saveNewCompany() {
+		try {
+			if (this.createdCompany != null)
+				this.companyDAO.save(this.createdCompany);
+			this.companies.add(this.createdCompany);
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Company created!"));
 			PrimeFaces.current().executeScript("PF('dlgCompanyWidgetVar').hide()");
 		} catch (final Exception e) {
@@ -215,6 +244,10 @@ public class CompanyBean implements Serializable {
 
 	public void setCompanyLazyModel(final LazyDataModel<Company> companyLazyModel) {
 		this.companyLazyModel = companyLazyModel;
+	}
+
+	public void setCreatedCompany(final Company createdCompany) {
+		this.createdCompany = createdCompany;
 	}
 
 	/**
