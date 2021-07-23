@@ -229,8 +229,8 @@ public class CompanyDaoImpl implements GenericDao<Company, Long>
 		}
 		catch (final Exception ex)
 		{
-			ex.printStackTrace();
 			this.tx.rollback();
+			throw ex;
 		}
 		finally
 		{
@@ -268,6 +268,13 @@ public class CompanyDaoImpl implements GenericDao<Company, Long>
 			this.session.close();
 		}
 
+	}
+
+	@Override
+	public int getRowCount()
+	{
+
+		return this.findAll().size();
 	}
 
 }

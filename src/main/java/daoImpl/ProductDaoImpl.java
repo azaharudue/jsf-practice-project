@@ -236,4 +236,10 @@ public class ProductDaoImpl implements GenericDao<Product, Long>
 
 	}
 
+	@Override
+	public int getRowCount()
+	{
+
+		return this.findAll().size();
+	}
 }

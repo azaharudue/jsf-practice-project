@@ -13,7 +13,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import org.primefaces.PrimeFaces;
 import org.primefaces.model.LazyDataModel;
 
 import main.java.daoImpl.CompanyDaoImpl;
@@ -27,7 +26,8 @@ import main.java.lazyModels.CompanyLazyModel;
 
 @Named("companyView")
 @ViewScoped
-public class CompanyBean implements Serializable {
+public class CompanyBean implements Serializable
+{
 	/**
 	 *
 	 */
@@ -45,7 +45,8 @@ public class CompanyBean implements Serializable {
 
 	private Company selectedCompany;
 
-	public CompanyBean() {
+	public CompanyBean()
+	{
 		this.companyDAO = new CompanyDaoImpl();
 
 	}
@@ -53,18 +54,19 @@ public class CompanyBean implements Serializable {
 	/**
 	 * Deletes selected company
 	 */
-	public void deleteCompany() {
-		try {
+	public void deleteCompany()
+	{
+		try
+		{
 			this.companies.remove(this.selectedCompany);
 			this.companyDAO.delete(this.selectedCompany);
 			this.selectedCompany = null;
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Company removed"));
-			PrimeFaces.current().ajax().update("growl", "formCompany:tbl-companies");
-			PrimeFaces.current().ajax().update("growl", "formCompany:tbl-companies");
-		} catch (final Exception e) {
+		}
+		catch (final Exception e)
+		{
 			e.printStackTrace(System.err);
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage("Company can not be removed, while products exists!"));
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Company can not be removed, while products exists!"));
 
 		}
 
@@ -74,7 +76,8 @@ public class CompanyBean implements Serializable {
 	 * Getters and setters
 	 */
 
-	public void deleteSelectedCompanies() {
+	public void deleteSelectedCompanies()
+	{
 		this.companies.removeAll(this.selectedCompanies);
 
 		for (final Company companyToBeDeleted : this.selectedCompanies)
@@ -84,61 +87,45 @@ public class CompanyBean implements Serializable {
 
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Companies Removed"));
 
-		PrimeFaces.current().ajax().update("growl", "formCompany:tbl-companies");
 	}
 
 	/**
 	 * @return the companies
 	 */
-	public List<Company> getCompanies() {
+	public List<Company> getCompanies()
+	{
 		return this.companies;
 	}
 
-	public LazyDataModel<Company> getCompanyLazyModel() {
+	public LazyDataModel<Company> getCompanyLazyModel()
+	{
 		return this.companyLazyModel;
 	}
 
-	public Company getCreatedCompany() {
+	public Company getCreatedCompany()
+	{
 		return this.createdCompany;
-	}
-
-	/**
-	 *
-	 * @return
-	 */
-	public String getDeleteButtonMessage() {
-		if (this.hasSelectedCompanies()) {
-			final int size = this.selectedCompanies.size();
-			return size > 1 ? size + " companies selected" : "1 Company selected";
-		}
-
-		return "Delete";
 	}
 
 	/**
 	 * @return the selectedCompanies
 	 */
-	public List<Company> getSelectedCompanies() {
+	public List<Company> getSelectedCompanies()
+	{
 		return this.selectedCompanies;
 	}
 
 	/**
 	 * @return the selectedCompany
 	 */
-	public Company getSelectedCompany() {
+	public Company getSelectedCompany()
+	{
 		return this.selectedCompany;
 	}
 
-	/**
-	 *
-	 * @return true if companies were selected
-	 */
-	public boolean hasSelectedCompanies() {
-		return (this.selectedCompanies != null) && !this.selectedCompanies.isEmpty();
-	}
-
 	@PostConstruct
-	public void init() {
+	public void init()
+	{
 		// this.companies = this.companyDAO.findAll();
 		this.companyLazyModel = new CompanyLazyModel();
 
@@ -148,7 +135,8 @@ public class CompanyBean implements Serializable {
 	 * Other methods
 	 */
 
-	public void openNew() {
+	public void openNew()
+	{
 		this.createdCompany = new Company();
 
 	}
@@ -159,16 +147,19 @@ public class CompanyBean implements Serializable {
 	 * @return
 	 */
 
-	public String saveCompany() {
-		try {
+	public String saveCompany()
+	{
+		try
+		{
 			this.companyDAO.save(this.selectedCompany);
 			this.companies.add(this.selectedCompany);
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Company Updated!"));
-			PrimeFaces.current().executeScript("PF('dlgCompanyWidgetVar').hide()");
-		} catch (final Exception e) {
 
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(e.getLocalizedMessage(), "Company not updated!"));
+		}
+		catch (final Exception e)
+		{
+
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getLocalizedMessage(), "Company not updated!"));
 
 		}
 
@@ -181,52 +172,56 @@ public class CompanyBean implements Serializable {
 	 * @return
 	 */
 
-	public String saveNewCompany() {
-		try {
-			if (this.createdCompany != null)
-				this.companyDAO.save(this.createdCompany);
+	public void saveNewCompany()
+	{
+		try
+		{
+			this.companyDAO.save(this.createdCompany);
 			this.companies.add(this.createdCompany);
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Company created!"));
-			PrimeFaces.current().executeScript("PF('dlgCompanyWidgetVar').hide()");
-		} catch (final Exception e) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Company created!", "Company created!"));
+			this.createdCompany = new Company();
 
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(e.getLocalizedMessage(), "Company not created!"));
+		}
+		catch (final Exception e)
+		{
+
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Company not created!", "Company not created!"));
 
 		}
 
-		return null;
 	}
 
 	/**
-	 * @param companies
-	 *            the companies to set
+	 * @param companies the companies to set
 	 */
-	public void setCompanies(final List<Company> companies) {
+	public void setCompanies(final List<Company> companies)
+	{
 		this.companies = companies;
 	}
 
-	public void setCompanyLazyModel(final LazyDataModel<Company> companyLazyModel) {
+	public void setCompanyLazyModel(final LazyDataModel<Company> companyLazyModel)
+	{
 		this.companyLazyModel = companyLazyModel;
 	}
 
-	public void setCreatedCompany(final Company createdCompany) {
+	public void setCreatedCompany(final Company createdCompany)
+	{
 		this.createdCompany = createdCompany;
 	}
 
 	/**
-	 * @param selectedCompanies
-	 *            the selectedCompanies to set
+	 * @param selectedCompanies the selectedCompanies to set
 	 */
-	public void setSelectedCompanies(final List<Company> selectedCompanies) {
+	public void setSelectedCompanies(final List<Company> selectedCompanies)
+	{
 		this.selectedCompanies = selectedCompanies;
 	}
 
 	/**
-	 * @param selectedCompany
-	 *            the selectedCompany to set
+	 * @param selectedCompany the selectedCompany to set
 	 */
-	public void setSelectedCompany(final Company selectedCompany) {
+	public void setSelectedCompany(final Company selectedCompany)
+	{
 		this.selectedCompany = selectedCompany;
 	}
 

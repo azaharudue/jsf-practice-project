@@ -57,4 +57,11 @@ public class CompanyLazyModel extends LazyDataModel<Company>
 		return (int) this.companyDAO.findAll().size();
 	}
 
+	@Override
+	public Company getRowData(final String rowKey)
+	{
+		final Long id = Long.valueOf(rowKey);
+		return this.companyDAO.findById(id);
+	}
+
 }

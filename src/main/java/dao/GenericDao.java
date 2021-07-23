@@ -27,6 +27,8 @@ public interface GenericDao<T, Long>
 
 	List<T> findPaged(int first, int pageSize, Map<String, SortMeta> sortBy, Map<String, FilterMeta> filterBy);
 
+	public int getRowCount();
+
 	public void save(T t);
 
 	public void update(T t);
