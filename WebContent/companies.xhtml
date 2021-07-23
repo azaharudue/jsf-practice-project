@@ -91,7 +91,8 @@
 				<p:commandButton value="Save" icon="pi pi-check"
 					process="pnlManageCompanyContent @this"
 					action="#{companyView.saveNewCompany}"
-					update=" :formCompany:pnlManageCompanyContent">
+					update=" :formCompany:pnlManageCompanyContent"
+					oncomplete="">
 					<p:resetInput target="pnlManageCompanyContent" />
 				</p:commandButton>
 
@@ -105,7 +106,7 @@
 		</p:dialog>
 		
 		<!-- Modal for updating  an existing company -->
-
+	<h:form id="editCompany">
 		<p:dialog id="dlgCompanyEdit" header="Company Details"
 			showEffect="fade" modal="true" widgetVar="dlgCompanyEditWidgetVar"
 			responsive="true">
@@ -130,7 +131,7 @@
 					process="pnlEditCompanyContent @this"
 					action="#{companyView.saveCompany}"
 					update=" :formCompany:pnlEditCompanyContent">
-					<p:resetInput target="pnlEditCompanyContent" />
+					<p:resetInput target=":editCompany:pnlEditCompanyContent" />
 				</p:commandButton>
 
 				<!-- cancel  -->
@@ -141,7 +142,7 @@
 				</p:commandButton>
 			</f:facet>
 		</p:dialog>
-
+</h:form>
 		<!-- Data table for companies  -->
 
 		<p:dataTable id="tbl-companies" widgetVar="tblCompaniesWidgetVar"

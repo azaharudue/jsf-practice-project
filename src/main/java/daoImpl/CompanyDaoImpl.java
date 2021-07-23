@@ -10,8 +10,11 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.primefaces.model.FilterMeta;
+import org.primefaces.model.SortMeta;
+import org.primefaces.model.SortOrder;
 
 import main.java.dao.GenericDao;
 import main.java.entities.Company;
@@ -21,14 +24,17 @@ import main.java.utils.SessionUtils;
  * @author azahar
  *
  */
-public class CompanyDaoImpl implements GenericDao<Company, Long> {
+public class CompanyDaoImpl implements GenericDao<Company, Long>
+{
 	private Session session = null;
 	private Transaction tx = null;
 
 	@Override
-	public void delete(final Company company) {
+	public void delete(final Company company)
+	{
 
-		try {
+		try
+		{
 			this.session = SessionUtils.getSessionFactory().openSession();
 			this.tx = this.session.beginTransaction();
 			// Uses session.delete()
@@ -43,10 +49,14 @@ public class CompanyDaoImpl implements GenericDao<Company, Long> {
 			query.executeUpdate();
 			this.tx.commit();
 
-		} catch (final Exception ex) {
+		}
+		catch (final Exception ex)
+		{
 			ex.printStackTrace();
 			this.tx.rollback();
-		} finally {
+		}
+		finally
+		{
 			this.session.close();
 		}
 
@@ -57,8 +67,10 @@ public class CompanyDaoImpl implements GenericDao<Company, Long> {
 	 *
 	 */
 	@Override
-	public void deleteAll() {
-		try {
+	public void deleteAll()
+	{
+		try
+		{
 			this.session = SessionUtils.getSessionFactory().openSession();
 			this.tx = this.session.beginTransaction();
 			// Gets the hql string and use Hql
@@ -67,19 +79,25 @@ public class CompanyDaoImpl implements GenericDao<Company, Long> {
 			this.session.createNamedQuery("deleteAllCompanies").executeUpdate();
 			this.tx.commit();
 
-		} catch (final Exception ex) {
+		}
+		catch (final Exception ex)
+		{
 			ex.printStackTrace();
 			this.tx.rollback();
-		} finally {
+		}
+		finally
+		{
 			this.session.close();
 		}
 
 	}
 
 	@Override
-	public List<Company> findAll() {
+	public List<Company> findAll()
+	{
 
-		try {
+		try
+		{
 			this.session = SessionUtils.getSessionFactory().openSession();
 			this.tx = this.session.beginTransaction();
 
@@ -103,10 +121,14 @@ public class CompanyDaoImpl implements GenericDao<Company, Long> {
 				System.out.println("\t|" + company.getName() + "\t\t" + company.getLocation() + "|");
 
 			return companies;
-		} catch (final Exception ex) {
+		}
+		catch (final Exception ex)
+		{
 			ex.printStackTrace();
 			this.tx.rollback();
-		} finally {
+		}
+		finally
+		{
 			this.session.close();
 		}
 		return null;
@@ -118,8 +140,10 @@ public class CompanyDaoImpl implements GenericDao<Company, Long> {
 	 * Uses HQL
 	 */
 	@Override
-	public Company findById(final Long id) {
-		try {
+	public Company findById(final Long id)
+	{
+		try
+		{
 			this.session = SessionUtils.getSessionFactory().openSession();
 			this.tx = this.session.beginTransaction();
 
@@ -134,12 +158,16 @@ public class CompanyDaoImpl implements GenericDao<Company, Long> {
 			System.out.println(company);
 			return company;
 
-		} catch (final Exception ex) {
+		}
+		catch (final Exception ex)
+		{
 			System.out.println("Company  with the id " + id + " not found!");
 			ex.printStackTrace();
 
 			this.tx.rollback();
-		} finally {
+		}
+		finally
+		{
 			this.session.close();
 		}
 		return null;
@@ -147,25 +175,37 @@ public class CompanyDaoImpl implements GenericDao<Company, Long> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Company> findPaged(final int first, final int pageSize, final String sortField, final boolean asc,
-			final Map<String, FilterMeta> filterBy) {
-		try {
+	public List<Company> findPaged(final int first, final int pageSize, final Map<String, SortMeta> sortBy, final Map<String, FilterMeta> filterBy)
+	{
+		try
+		{
 			this.session = SessionUtils.getSessionFactory().openSession();
+
 			@SuppressWarnings("deprecation")
 			final Criteria cr = this.session.createCriteria(Company.class);
 			cr.setFirstResult(first);
 			cr.setMaxResults(pageSize);
-			if (sortField != null)
-				if (asc)
-					cr.addOrder(Order.asc(sortField));
+
+			for (final Map.Entry<String, SortMeta> entrySort : sortBy.entrySet())
+				if (entrySort.getValue().getSortOrder() == SortOrder.ASCENDING)
+					cr.addOrder(Order.asc(entrySort.getValue().getSortField()));
 				else
-					cr.addOrder(Order.desc(sortField));
+					cr.addOrder(Order.desc(entrySort.getValue().getSortField()));
+
+			for (final Map.Entry<String, FilterMeta> entryFilter : filterBy.entrySet())
+				if ((entryFilter.getValue().getFilterField() != null) && (entryFilter.getValue().getFilterValue() != null))
+					cr.add(Restrictions.ilike(entryFilter.getValue().getFilterField(),
+						"%" + entryFilter.getValue().getFilterValue().toString().toLowerCase() + "%"));
 
 			return cr.list();
 
-		} catch (final Exception ex) {
+		}
+		catch (final Exception ex)
+		{
 			ex.printStackTrace();
-		} finally {
+		}
+		finally
+		{
 			this.session.close();
 		}
 		return null;
@@ -175,8 +215,10 @@ public class CompanyDaoImpl implements GenericDao<Company, Long> {
 	 * Persist an Object
 	 */
 	@Override
-	public void save(final Company company) {
-		try {
+	public void save(final Company company)
+	{
+		try
+		{
 			this.session = SessionUtils.getSessionFactory().openSession();
 			this.tx = this.session.beginTransaction();
 			// We can use sssion.evict() for a detcahed instance.
@@ -184,10 +226,14 @@ public class CompanyDaoImpl implements GenericDao<Company, Long> {
 			this.session.saveOrUpdate(company);
 			this.tx.commit();
 
-		} catch (final Exception ex) {
+		}
+		catch (final Exception ex)
+		{
 			ex.printStackTrace();
 			this.tx.rollback();
-		} finally {
+		}
+		finally
+		{
 			this.session.close();
 		}
 
@@ -198,8 +244,10 @@ public class CompanyDaoImpl implements GenericDao<Company, Long> {
 	 *
 	 */
 	@Override
-	public void update(final Company company) {
-		try {
+	public void update(final Company company)
+	{
+		try
+		{
 			this.session = SessionUtils.getSessionFactory().openSession();
 			this.tx = this.session.beginTransaction();
 			// Gets the hql string
@@ -209,10 +257,14 @@ public class CompanyDaoImpl implements GenericDao<Company, Long> {
 			this.session.saveOrUpdate(company);
 			this.tx.commit();
 
-		} catch (final Exception ex) {
+		}
+		catch (final Exception ex)
+		{
 			ex.printStackTrace();
 			this.tx.rollback();
-		} finally {
+		}
+		finally
+		{
 			this.session.close();
 		}
 

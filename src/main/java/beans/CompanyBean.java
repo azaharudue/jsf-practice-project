@@ -6,7 +6,6 @@ package main.java.beans;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -15,12 +14,11 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
 import org.primefaces.PrimeFaces;
-import org.primefaces.model.FilterMeta;
 import org.primefaces.model.LazyDataModel;
-import org.primefaces.model.SortOrder;
 
 import main.java.daoImpl.CompanyDaoImpl;
 import main.java.entities.Company;
+import main.java.lazyModels.CompanyLazyModel;
 
 /**
  * @author Azahar Hossain
@@ -142,51 +140,17 @@ public class CompanyBean implements Serializable {
 	@PostConstruct
 	public void init() {
 		// this.companies = this.companyDAO.findAll();
-		this.companyLazyModel = new LazyDataModel<Company>() {
-
-			/**
-			 *
-			 */
-			private static final long serialVersionUID = -1105344323215332439L;
-
-			@Override
-			public int getRowCount() {
-
-				return CompanyBean.this.companyDAO.findAll().size();
-			}
-
-			@Override
-			public Company getRowData(final String rowKey) {
-				// TODO Auto-generated method stub
-				for (final Company c : CompanyBean.this.companies)
-					if (c.getId() == Long.valueOf(rowKey))
-						return c;
-				return null;
-			}
-
-			@Override
-			public Long getRowKey(final Company company) {
-				// TODO Auto-generated method stub
-				return company.getId();
-			}
-
-			@Override
-			public List<Company> load(final int first, final int pageSize, final String sortField,
-					final SortOrder sortOrder, final Map<String, FilterMeta> filterBy) {
-				this.setRowCount(this.getRowCount());
-				return CompanyBean.this.companyDAO.findPaged(first, pageSize, sortField,
-						SortOrder.ASCENDING.equals(sortOrder), filterBy);
-			}
-
-		};
+		this.companyLazyModel = new CompanyLazyModel();
 
 	}
 
 	/*
 	 * Other methods
 	 */
+
 	public void openNew() {
 		this.createdCompany = new Company();
+
 	}
 
 	/**
