@@ -19,5 +19,9 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/log4j"/>
+	<classpathentry kind="lib" path="C:/Users/Azahar Hossain/Downloads/freemarker-2.3.20.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Azahar Hossain/Downloads/itext-2.1.7.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Azahar Hossain/Downloads/flying-saucer-core-9.1.21.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Azahar Hossain/Downloads/flying-saucer-pdf-9.1.21.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

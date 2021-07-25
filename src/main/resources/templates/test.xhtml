@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<html>
+<head>
+<title>Welcome!</title>
+</head>
+<body>
+
+	<#foreach item in printables>
+	<#if item=="products">
+	<h1>List of all products</h1>
+	<table border="1" cellspacing="0" cellpadding="1">
+		<tr class="tableHeader">
+			<td>Id</td>
+			<td>Name</td>
+
+		</tr>
+		<#foreach product in products>
+		<tr class="tableBody">
+			<td>${product.id}</td>
+			<td>${product.name}</td>
+		</tr>
+		</#foreach>
+	</table>
+	</#if> </#foreach>
+</body>
+</html>
