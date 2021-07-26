@@ -90,7 +90,7 @@
 				<p:commandButton value="Save" icon="pi pi-check"
 					process="pnlAddCompanyContent @this"
 					action="#{companyView.saveNewCompany}"
-					update=":growl,:formCompany:pnlAddCompanyContent"
+					update="@this, :growl,:formCompany:pnlAddCompanyContent"
 					oncomplete="if(!args.validationFailed){PF('dlgCompanyAddWidgetVar').hide();}">
 
 				</p:commandButton>
@@ -128,16 +128,18 @@
 				<p:commandButton value="Save" icon="pi pi-check"
 					process="pnlEditCompanyContent @this"
 					action="#{companyView.saveCompany}"
-					update=":formCompany:pnlEditCompanyContent">
+					update="@this, :growl,:formCompany:pnlEditCompanyContent, :formCompany:tblCompany"
+					oncomplete="if(!args.validationFailed){PF('dlgCompanyEditWidgetVar').hide();}"
+					>
 
 				</p:commandButton>
 
 				<!-- cancel  -->
-				<p:commandButton value="Cancel" icon="pi pi-times"
+				<p:button value="Cancel" icon="pi pi-times"
 					onclick="PF('dlgCompanyEditWidgetVar').hide()"
 					class="ui-button-secondary">
 
-				</p:commandButton>
+				</p:button>
 			</f:facet>
 		</p:dialog>
 

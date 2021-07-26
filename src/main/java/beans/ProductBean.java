@@ -2,7 +2,9 @@ package main.java.beans;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
@@ -20,6 +22,7 @@ import main.java.daoImpl.CompanyDaoImpl;
 import main.java.daoImpl.ProductDaoImpl;
 import main.java.entities.Company;
 import main.java.entities.Product;
+import main.java.utils.PrintUtils;
 
 @Named("basicView")
 @ViewScoped
@@ -231,30 +234,18 @@ public class ProductBean implements Serializable
 		return foundCompanies;
 	}
 
-	/*
-	 * /** Helper function
-	 *
-	 * @param userInput
-	 *
-	 * @return
-	 *
-	 * private List<Company> checkMatches(final String userInput) {
-	 *
-	 * final List<Company> companies = this.companyDAO.findAll(); return
-	 * companies.stream().filter(t ->
-	 * t.getName().toLowerCase().contains(userInput)).collect(Collectors.toList(
-	 * )); }
-	 *
-	 *
-	 *
-	 * public List<Company> completeCompanyLocation(final String userInput) {
-	 * final List<String> locationList = new ArrayList<>(); final String
-	 * userInputLowerCase = userInput.toLowerCase();
-	 *
-	 * final List<Company> foundCompanies =
-	 * this.checkMatches(userInputLowerCase); for (final Company company :
-	 * foundCompanies) { locationList.add(company.getLocation()); } return
-	 * locationList; }
-	 */
+	public void printPdf()
+	{
+		final Map<String, Object> root = new HashMap<>();
+		final List<String> printables = new ArrayList<>();
+
+		printables.add("products");
+
+		root.put("printables", printables);
+		root.put("baseURL", "D:\\azahar\\dev\\code\\jsf-practice-project\\WebContent\\resources\\images\\shop.png");
+
+		root.put("products", this.selectedProducts);
+		PrintUtils.printToPdf(this.selectedProducts, root, "products");
+	}
 
 }

@@ -42,10 +42,11 @@
 				<!-- Delete Product Button -->
 
 				<p:commandButton id="delete-products-button"
-					value="#{basicView.deleteButtonMessage}" icon="pi pi-trash"
-					action="#{basicView.deleteSelectedProducts}"
-					styleClass="rounded-button ui-button-danger"
-					disabled="#{!(basicView.hasSelectedProducts())}">
+				value="#{not empty basicView.selectedProducts? basicView.selectedProducts.size() : '  '  } Delete"
+					icon="pi pi-trash" styleClass="rounded-button ui-button-danger"
+					disabled="#{empty basicView.selectedProducts}" process="@this"
+					action="#{basicView.deleteSelectedProducts}"					
+					update="@this, :growl, :formProduct:tblProduct">
 
 					<p:confirm header="Confirmation"
 						message="Delete the selected products?"
@@ -142,15 +143,15 @@
 
 
 				<p:ajax event="rowSelect"
-					update=":formProduct:delete-products-button" />
+					update=":formProduct:delete-products-button, :formProduct:export-products-button" />
 				<p:ajax event="rowUnselect"
-					update=":formProduct:delete-products-button" />
+					update=":formProduct:delete-products-button, :formProduct:export-products-button" />
 				<p:ajax event="rowSelectCheckbox"
-					update=":formProduct:delete-products-button" />
+					update=":formProduct:delete-products-button, :formProduct:export-products-button" />
 				<p:ajax event="rowUnselectCheckbox"
-					update=":formProduct:delete-products-button" />
+					update=":formProduct:delete-products-button, :formProduct:export-products-button" />
 				<p:ajax event="toggleSelect"
-					update=":formProduct:delete-products-button" />
+					update=":formProduct:delete-products-button, :formProduct:export-products-button" />
 
 
 				<!-- Table header and global filter-->
@@ -249,8 +250,6 @@
 					</p:commandButton>
 
 
-
-
 				</p:column>
 
 
@@ -280,7 +279,14 @@
 
 
 		</div>
-
+<!-- Export selected products as pdf -->
+<p:commandButton id="export-products-button" process="@this"
+					value="#{not empty basicView.selectedProducts? basicView.selectedProducts.size() : '  '  } Export as Pdf"	icon="pi pi-file-pdf" styleClass="rounded-button ui-button-danger"
+					disabled="#{empty basicView.selectedProducts}" 
+					action="#{basicView.printPdf}"					
+					update="@this, :growl, :formProduct:tblProduct"
+					oncomplete="">
+</p:commandButton>
 	</h:form>
 
 </h:body>

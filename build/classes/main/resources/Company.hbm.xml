@@ -8,7 +8,7 @@
             <generator class="identity" />
         </id>
 		  
-		  <natural-id>
+		  <natural-id mutable="true" >
 		  	<property name="name"  > </property>
 		  </natural-id>
 		  
