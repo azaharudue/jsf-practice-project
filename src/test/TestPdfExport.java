@@ -4,10 +4,10 @@ package test;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.java.daoImpl.CompanyDaoImpl;
-import main.java.daoImpl.ProductDaoImpl;
-import main.java.entities.Company;
-import main.java.entities.Product;
+import com.jsftest.main.java.daoImpl.CompanyDaoImpl;
+import com.jsftest.main.java.daoImpl.ProductDaoImpl;
+import com.jsftest.main.java.entities.Company;
+import com.jsftest.main.java.entities.Product;
 
 public class TestPdfExport
 {

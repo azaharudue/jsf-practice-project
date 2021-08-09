@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<facelet-taglib xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd"
+	version="2.0">
+	<namespace>http://jsftest.com/functions</namespace>
+
+	<function>
+		<function-name>hasProduct</function-name>
+		<function-class>com.jsftest.main.jsf.ELFunctions</function-class>
+		<function-signature>boolean hasProduct(java.util.List , java.lang.String)</function-signature>
+	</function>
+	<function>
+		<function-name>numberOfCompanies</function-name>
+		<function-class>com.jsftest.main.jsf.ELFunctions</function-class>
+		<function-signature>String numberOfCompanies()</function-signature>
+	</function>
+</facelet-taglib>

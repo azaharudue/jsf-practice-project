@@ -44,5 +44,20 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="H:/dev/resources/libraries/jsoup-1.12.1.jar"/>
+	<classpathentry kind="lib" path="H:/dev/resources/libraries/faces/omnifaces-3.2.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="H:/dev/resources/libraries/mysql-connector-java-8.0.11.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="H:/dev/resources/libraries/faces/primefaces-extensions-8.0.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<composite:interface>
+	
+</composite:interface>
+
+
+<composite:implementation>
+
+	<div id="#{cc.clientId}">
+
+		<h:form id="localeSelectionForm">
+
+			<p:toolbar>
+
+				<p:toolbarGroup align="right" style="margin-right:2em;">
+
+					<p:selectOneMenu value="#{sessionBean.language}">
+						<f:selectItem itemValue="en" itemLabel="English" />
+						<f:selectItem itemValue="de" itemLabel="German" />
+						
+						<p:ajax event="change" process="@this" update="@form" oncomplete="window.location.reload()"/>
+					</p:selectOneMenu>
+					
+					
+
+
+				</p:toolbarGroup>
+				<!--toolbar caret menu -->
+				<p:toolbarGroup align="right">
+					<p:splitButton value="Navigate">
+						<p:menuitem value="Products" url="index.xhtml"
+							icon="pi pi-external-link" />
+						<p:menuitem value="Product details" url="details.xhtml"
+							icon="pi pi-external-link" />
+						<p:menuitem value="Companies" url="companies.xhtml"
+							icon="pi pi-external-link" />
+						<p:menuitem value="Summary" url="summary-view.xhtml"
+							icon="pi pi-external-link" />
+					</p:splitButton>
+				</p:toolbarGroup>
+			</p:toolbar>
+		</h:form>
+	</div>
+
+</composite:implementation>
+
+</html>

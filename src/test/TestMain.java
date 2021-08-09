@@ -4,18 +4,20 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.java.daoImpl.CompanyDaoImpl;
-import main.java.daoImpl.ProductDaoImpl;
-import main.java.entities.Company;
-import main.java.entities.Product;
+import com.jsftest.main.java.daoImpl.CompanyDaoImpl;
+import com.jsftest.main.java.daoImpl.ProductDaoImpl;
+import com.jsftest.main.java.entities.Company;
+import com.jsftest.main.java.entities.Product;
 
-public class TestMain {
+public class TestMain
+{
 
 	private static List<Company> companies = new ArrayList<Company>();
 
 	private static List<Product> products = new ArrayList<Product>();
 
-	public static void main(final String[] args) {
+	public static void main(final String[] args)
+	{
 		// TODO Auto-generated method stub
 		final ProductDaoImpl productDAO = new ProductDaoImpl();
 
@@ -39,7 +41,8 @@ public class TestMain {
 
 		productDAO.save(newproduct);
 
-		try {
+		try
+		{
 			for (final Product product : productDAO.findAll())
 				if (product != null)
 					TestMain.products = productDAO.findAll();
@@ -48,7 +51,9 @@ public class TestMain {
 				if (company != null)
 					TestMain.companies = companyDAO.findAll();
 
-		} catch (final Exception e) {
+		}
+		catch (final Exception e)
+		{
 			e.printStackTrace();
 		}
 		System.out.println(TestMain.products);

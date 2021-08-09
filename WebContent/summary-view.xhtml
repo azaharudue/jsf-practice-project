@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:elFunc="http://jsftest.com/functions"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:of="http://omnifaces.org/functions"
+	xmlns:cp="http://java.sun.com/jsf/composite/components"
+	lang="#{sessionBean.language}">
+
+<f:view locale="#{sessionBean.locale}">
+	<h:head>
+		<cp:formNavbarLocaleComponent formId="formNavbar"
+			bean="#{sessionBean}" />
+
+		<p:toolbar>
+			<p:toolbarGroup align="left">
+				<h1>#{msg.summary_dashboard}</h1>
+			</p:toolbarGroup>
+		</p:toolbar>
+
+	</h:head>
+	<h:body>
+
+		<div id="card">
+			<h:outputText value="#{msg.summary_prices_label}" styleClass="basic" />
+			<h:outputText value="#{elFunc:numberOfCompanies()}" />
+			<div>
+
+				<h:outputText value="Has any company with product name cola ? : " />
+				<h:outputText value="#{elFunc:hasProduct(companyView.companies, 'cola')}" />
+			</div>
+
+		</div>
+
+	</h:body>
+</f:view>
+</html>

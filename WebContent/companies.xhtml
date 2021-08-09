@@ -6,15 +6,19 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:of="http://omnifaces.org/functions"
+	lang="#{sessionBean.language}"
+	>
 
-
+<f:view locale="#{sessionBean.locale}">
 
 <h:head>
 	<meta charset="utf-8" name="viewport"
 		content="width=device-width, initial-scale=1" />
 	<h:outputStylesheet name="style.css" library="css" />
-	<title>Companies</title>
+	<title>#{msg.title_company}</title>
 
 
 </h:head>
@@ -22,12 +26,11 @@
 <h:body>
 
 
-
 	<!-- Use for a global message  -->
 	<p:growl id="growl" redisplay="false" />
-
+	<cp:formNavbarLocaleComponent  bean="#{sessionBean}" formId="formNavbar"/>
 	<h:form id="formCompany">
-
+		
 		<p:toolbar>
 			<p:toolbarGroup>
 
@@ -55,17 +58,8 @@
 						icon="pi pi-exclamation-triangle" />
 				</p:commandButton>
 
-
 			</p:toolbarGroup>
-			<!--toolbar caret menu -->
-			<p:toolbarGroup align="right" style="width: 10rem">
-				<p:splitButton value="Navigate">
-					<p:menuitem value="Product details" url="details.xhtml"
-						icon="pi pi-external-link" />
-					<p:menuitem value="Home(Products)" url="index.xhtml"
-						icon="pi pi-home" />
-				</p:splitButton>
-			</p:toolbarGroup>
+		
 		</p:toolbar>
 
 
@@ -175,7 +169,7 @@
 			<f:facet name="header">
 				<p:toolbar>
 					<p:toolbarGroup class="p-d-flex p-ai-center p-jc-between">
-						<h1>Companies</h1>
+						<h1>#{msg['title_company']}</h1>
 						<span align="left"><h:outputText
 								value="Total available companies :#{companyView.companyLazyModel.rowCount}" /></span>
 					</p:toolbarGroup>
@@ -279,6 +273,6 @@
 	</h:form>
 
 </h:body>
-
+</f:view>
 
 </html>
