@@ -9,11 +9,11 @@
         </id>
 		  
 		  <natural-id mutable="true" >
-		  	<property name="name"  > </property>
+		  	<property name="name"/> 
 		  </natural-id>
 		  
-		  
-        <property name="location" ></property>
+		<property name="email" />
+        <property name="location" />
 		 <!--  <set cascade="all"  name="productDetail" sort="unsorted" >
 		  				 <key column="product_id" not-null="true"></key>
 			  			 <one-to-many class="main.java.entity.ProductDetail"></one-to-many>

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
@@ -31,11 +32,13 @@ public class ProductBean implements Serializable
 
 	private static final long serialVersionUID = -3816399998127217254L;
 
+	private Company company;
+
+	private final Converter<Company> companyConverter;
+
 	private final CompanyDaoImpl companyDAO;
 
 	private final ProductDaoImpl productDAO;
-
-	private final Converter<Company> companyConverter;
 
 	private List<Product> products = new ArrayList<Product>();
 
@@ -43,7 +46,7 @@ public class ProductBean implements Serializable
 
 	private List<Product> selectedProducts;
 
-	private Company company;
+	private TimeZone timezone;
 
 	public ProductBean()
 	{
@@ -54,11 +57,15 @@ public class ProductBean implements Serializable
 		this.companyConverter = new GenericConverter<>(this.companyDAO);
 	}
 
-	@PostConstruct
-	public void init()
+	public List<Company> completeCompany(final String userInput)
 	{
-		this.products = this.productDAO.findAll();
+		// inal List<String> nameList = new ArrayList<>();
+		final String userInputLowerCase = userInput.toLowerCase();
+		final List<Company> companies = this.companyDAO.findAll();
+		final List<Company> foundCompanies = companies.stream().filter(t -> t.getName().toLowerCase().contains(userInputLowerCase))
+			.collect(Collectors.toList());
 
+		return foundCompanies;
 	}
 
 	public void deleteProduct()
@@ -90,6 +97,22 @@ public class ProductBean implements Serializable
 		catch (final Exception e)
 		{
 		}
+	}
+
+	/**
+	 * @return the company
+	 */
+	public Company getCompany()
+	{
+		return this.company;
+	}
+
+	/**
+	 * @return the companyConverter
+	 */
+	public Converter<Company> getCompanyConverter()
+	{
+		return this.companyConverter;
 	}
 
 	public String getDeleteButtonMessage()
@@ -124,33 +147,16 @@ public class ProductBean implements Serializable
 		return this.selectedProducts;
 	}
 
-	/**
-	 * @return the company
-	 */
-	public Company getCompany()
-	{
-		return this.company;
-	}
-
-	/**
-	 * @param company the company to set
-	 */
-	public void setCompany(final Company company)
-	{
-		this.company = company;
-	}
-
-	/**
-	 * @return the companyConverter
-	 */
-	public Converter<Company> getCompanyConverter()
-	{
-		return this.companyConverter;
-	}
-
 	public boolean hasSelectedProducts()
 	{
 		return (this.selectedProducts != null) && !this.selectedProducts.isEmpty();
+	}
+
+	@PostConstruct
+	public void init()
+	{
+		this.products = this.productDAO.findAll();
+
 	}
 
 	public void onRowCancel(final RowEditEvent<Product> event)
@@ -178,6 +184,20 @@ public class ProductBean implements Serializable
 		this.selectedProduct.setCompany(new Company());
 	}
 
+	public void printPdf()
+	{
+		final Map<String, Object> root = new HashMap<>();
+		final List<String> printables = new ArrayList<>();
+
+		printables.add("products");
+
+		root.put("printables", printables);
+		root.put("baseURL", "D:\\azahar\\dev\\code\\jsf-practice-project\\WebContent\\resources\\images\\shop.png");
+
+		root.put("products", this.selectedProducts);
+		PrintUtils.printToPdf(this.selectedProducts, root, "products");
+	}
+
 	public String saveProduct()
 	{
 		try
@@ -197,6 +217,14 @@ public class ProductBean implements Serializable
 		}
 
 		return null;
+	}
+
+	/**
+	 * @param company the company to set
+	 */
+	public void setCompany(final Company company)
+	{
+		this.company = company;
 	}
 
 	/**
@@ -223,29 +251,14 @@ public class ProductBean implements Serializable
 		this.selectedProducts = selectedProducts;
 	}
 
-	public List<Company> completeCompany(final String userInput)
+	public TimeZone getTimezone()
 	{
-		// inal List<String> nameList = new ArrayList<>();
-		final String userInputLowerCase = userInput.toLowerCase();
-		final List<Company> companies = this.companyDAO.findAll();
-		final List<Company> foundCompanies = companies.stream().filter(t -> t.getName().toLowerCase().contains(userInputLowerCase))
-			.collect(Collectors.toList());
-
-		return foundCompanies;
+		return timezone;
 	}
 
-	public void printPdf()
+	public void setTimezone(TimeZone timezone)
 	{
-		final Map<String, Object> root = new HashMap<>();
-		final List<String> printables = new ArrayList<>();
-
-		printables.add("products");
-
-		root.put("printables", printables);
-		root.put("baseURL", "D:\\azahar\\dev\\code\\jsf-practice-project\\WebContent\\resources\\images\\shop.png");
-
-		root.put("products", this.selectedProducts);
-		PrintUtils.printToPdf(this.selectedProducts, root, "products");
+		this.timezone = timezone;
 	}
 
 }

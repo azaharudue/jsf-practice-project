@@ -18,19 +18,16 @@ public class SessionBean implements Serializable
 	 */
 	private static final long serialVersionUID = -3729302704486017727L;
 
+	private Locale locale = Locale.GERMAN;
+
 	public SessionBean()
 	{
 
 	}
 
-	private Locale locale = Locale.GERMAN;
-
-	@PostConstruct
-	public void init()
+	public String getLanguage()
 	{
-		// this.locale =
-		// FacesContext.getCurrentInstance().getViewRoot().getLocale();
-		FacesContext.getCurrentInstance().getViewRoot().setLocale(this.locale);
+		return this.locale.getLanguage();
 	}
 
 	public Locale getLocale()
@@ -38,9 +35,12 @@ public class SessionBean implements Serializable
 		return this.locale;
 	}
 
-	public String getLanguage()
+	@PostConstruct
+	public void init()
 	{
-		return this.locale.getLanguage();
+		// this.locale =
+		FacesContext.getCurrentInstance().getViewRoot().getLocale();
+		// FacesContext.getCurrentInstance().getViewRoot().setLocale(this.locale);
 	}
 
 	public void setLanguage(final String language)

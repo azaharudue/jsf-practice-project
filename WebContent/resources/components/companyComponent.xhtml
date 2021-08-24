@@ -17,16 +17,23 @@
 <composite:implementation>
 
 	<div id="#{cc.clientId}">
-	
+		<!-- name -->
 		<div class="p-field">
 			<p:outputLabel for="name" value="Company Name" />
 			<p:inputText id="name" value="#{cc.attrs.company.name}" />
 		</div>
-		<!-- company location -->
+		<!--email-->
 		<div class="p-field">
-			<p:outputLabel for="location" value="Company Location" />
-			<p:inputText id="location" value="#{cc.attrs.company.location}" />
+			<p:outputLabel for="email" value="Email" />
+			<p:inputText id="email" value="#{cc.attrs.company.email}" />
 		</div>
+		<!--location -->
+		<div class="p-field">
+			<p:outputLabel for="location" value="Location" />
+			<p:inputText id="location" value="#{cc.attrs.company.location}" />
+			<f:validator validatorId="com.jsftest.main.java.utils.EmailValidator"/>
+		</div>
+		
 		
 	</div>
 	

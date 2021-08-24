@@ -11,10 +11,7 @@
 	xmlns:cp="http://java.sun.com/jsf/composite/components"
 	lang="#{sessionBean.language}">
 
-<f:view locale="#{sessionBean.locale}">
 	<h:head>
-		<cp:formNavbarLocaleComponent formId="formNavbar"
-			bean="#{sessionBean}" />
 
 		<p:toolbar>
 			<p:toolbarGroup align="left">
@@ -24,18 +21,38 @@
 
 	</h:head>
 	<h:body>
-
+		<o:importFunctions
+			type="com.jsftest.main.java.utils.TimeZoneConverter" />
 		<div id="card">
 			<h:outputText value="#{msg.summary_prices_label}" styleClass="basic" />
 			<h:outputText value="#{elFunc:numberOfCompanies()}" />
 			<div>
 
 				<h:outputText value="Has any company with product name cola ? : " />
-				<h:outputText value="#{elFunc:hasProduct(companyView.companies, 'cola')}" />
+				<h:outputText
+					value="#{elFunc:hasProduct(companyView.companies, 'cola')}" />
 			</div>
 
 		</div>
+		<table>
+			<tr>
+				<td><p:outputLabel for="timeZone"
+						value="#{msgBackend.geoCountry_timeZone_label}: " /></td>
+				<td><p:selectOneMenu id="timeZone" autoWidth="false"
+						required="true" value="#{basicView.timezone}"
+						converter="timeZoneConverter" filter="true"
+						filterMatchMode="contains">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="#{msg.selectDots_u}" itemDisabled="true" />
+						<f:selectItems
+							value="#{TimeZoneConverter:getAvailableTimeZones()}"
+							var="varTimeZone"
+							itemLabel="#{TimeZoneConverter:formatRawOffset(varTimeZone, null)} #{varTimeZone.getID()}"
+							itemValue="#{varTimeZone}" />
+					</p:selectOneMenu></td>
+			</tr>
+		</table>
 
 	</h:body>
-</f:view>
+
 </html>

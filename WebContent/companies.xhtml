@@ -34,7 +34,7 @@
 		<p:toolbar>
 			<p:toolbarGroup>
 
-				<!-- Add new Product Button -->
+				<!-- Add new Company Button -->
 				<p:commandButton value="Add new company" icon="pi pi-plus"
 					action="#{companyView.openNew}" update="dlgCompanyAdd"
 					oncomplete="PF('dlgCompanyAddWidgetVar').show()"
@@ -195,7 +195,7 @@
 
 
 
-			<!-- Company name -->
+			<!--name -->
 
 			<p:column headerText="Company name" sortBy="#{tblVarCompany.name}"
 				filterBy="#{tblVarCompany.name}"
@@ -203,8 +203,16 @@
 				<h:outputText value="#{tblVarCompany.name}" />
 
 			</p:column>
+			
+				<!--email -->
+			<p:column headerText="Email" sortBy="#{tblVarCompany.email}"
+				filterBy="#{tblVarCompany.email}"
+				styleClass="leftAlignedColumnContent">
+				<h:outputText value="#{tblVarCompany.email}" />
 
-			<!-- Company location -->
+			</p:column>
+
+			<!--location -->
 
 			<p:column headerText="Location" sortBy="#{tblVarCompany.location}"
 				filterBy="#{tblVarCompany.location}"

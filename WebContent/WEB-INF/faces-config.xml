@@ -16,4 +16,8 @@
 		       <var>msg</var>
 		   </resource-bundle>
     </application>
+    <component>
+		    <component-type>org.omnifaces.component.validator.ValidateMultiple</component-type>
+		    <component-class>org.omnifaces.component.validator.ValidateMultiple</component-class>
+	</component>
 </faces-config>

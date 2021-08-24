@@ -5,6 +5,7 @@ package com.jsftest.main.java.entities;
 
 import java.util.List;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 import org.hibernate.validator.constraints.Length;
@@ -23,11 +24,16 @@ public class Company extends AbstractEntity
 
 	@NotBlank
 	@Length(min = 3, max = 255)
-	private String name;
+	@Email
+	private String email;
 
 	@NotBlank
 	@Length(min = 2, max = 255)
 	private String location;
+
+	@NotBlank
+	@Length(min = 3, max = 255)
+	private String name;
 
 	private List<Product> products;
 
@@ -36,26 +42,6 @@ public class Company extends AbstractEntity
 	 */
 	public Company()
 	{
-	}
-
-	/**
-	 * @param name
-	 * @param location
-	 * @param products
-	 */
-	public Company(final String name, final String location, final List<Product> products)
-	{
-		this.name = name;
-		this.location = location;
-		this.products = products;
-	}
-
-	/**
-	 * @param name
-	 */
-	public Company(final String name)
-	{
-		this.name = name;
 	}
 
 	/**
@@ -72,6 +58,26 @@ public class Company extends AbstractEntity
 		this.products = products;
 	}
 
+	/**
+	 * @param name
+	 */
+	public Company(final String name)
+	{
+		this.name = name;
+	}
+
+	/**
+	 * @param name
+	 * @param location
+	 * @param products
+	 */
+	public Company(final String name, final String location, final List<Product> products)
+	{
+		this.name = name;
+		this.location = location;
+		this.products = products;
+	}
+
 	@Override
 	public Company clone()
 	{
@@ -82,9 +88,9 @@ public class Company extends AbstractEntity
 	 * Getters & Setters
 	 */
 
-	public String getName()
+	public String getEmail()
 	{
-		return this.name;
+		return this.email;
 	}
 
 	public String getLocation()
@@ -92,19 +98,29 @@ public class Company extends AbstractEntity
 		return this.location;
 	}
 
+	public String getName()
+	{
+		return this.name;
+	}
+
 	public List<Product> getProducts()
 	{
 		return this.products;
 	}
 
-	public void setName(final String name)
+	public void setEmail(final String email)
 	{
-		this.name = name;
+		this.email = email;
 	}
 
 	public void setLocation(final String location)
 	{
 		this.location = location;
+	}
+
+	public void setName(final String name)
+	{
+		this.name = name;
 	}
 
 	public void setProducts(final List<Product> products)
@@ -115,7 +131,7 @@ public class Company extends AbstractEntity
 	@Override
 	public String toString()
 	{
-		return "Company [id=" + this.id + ", name=" + this.name + ", location=" + this.location + ", products=" + this.products + "]";
+		return "Company [id=" + this.id + ", name=" + this.name + ",email=" + this.email + ", location=" + this.location + ", products=" + this.products + "]";
 	}
 
 }
