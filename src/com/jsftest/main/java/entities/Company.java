@@ -48,6 +48,19 @@ public class Company extends AbstractEntity
 	 * @param id
 	 * @param name
 	 * @param location
+	 *
+	 */
+	public Company(final Long id, final String name, final String location)
+	{
+		this.id = id;
+		this.name = name;
+		this.location = location;
+	}
+
+	/**
+	 * @param id
+	 * @param name
+	 * @param location
 	 * @param products
 	 */
 	public Company(final Long id, final String name, final String location, final List<Product> products)
@@ -76,6 +89,20 @@ public class Company extends AbstractEntity
 		this.name = name;
 		this.location = location;
 		this.products = products;
+	}
+
+	/**
+	 *
+	 * @param email
+	 * @param location
+	 * @param name
+	 */
+	public Company(final String email, final String location, final String name)
+	{
+		super();
+		this.email = email;
+		this.location = location;
+		this.name = name;
 	}
 
 	@Override

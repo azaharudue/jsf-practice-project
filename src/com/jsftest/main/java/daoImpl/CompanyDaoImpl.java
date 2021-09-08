@@ -116,9 +116,8 @@ public class CompanyDaoImpl implements GenericDao<Company, Long>
 			@SuppressWarnings("unchecked")
 			final List<Company> companies = this.session.createNamedQuery("getAllCompanies").getResultList();
 
-			System.out.println("\t--------Product name------|\t costs------------------\n");
 			for (final Company company : companies)
-				System.out.println("\t|" + company.getName() + "\t\t" + company.getLocation() + "|");
+				System.out.println(company.toString());;
 
 			return companies;
 		}
@@ -211,6 +210,13 @@ public class CompanyDaoImpl implements GenericDao<Company, Long>
 		return null;
 	}
 
+	@Override
+	public int getRowCount()
+	{
+
+		return this.findAll().size();
+	}
+
 	/**
 	 * Persist an Object
 	 */
@@ -268,13 +274,6 @@ public class CompanyDaoImpl implements GenericDao<Company, Long>
 			this.session.close();
 		}
 
-	}
-
-	@Override
-	public int getRowCount()
-	{
-
-		return this.findAll().size();
 	}
 
 }

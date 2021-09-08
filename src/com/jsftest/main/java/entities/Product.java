@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
 /**
- * @author azahar copyright (c) 2021
+ * @author Azahar Hossain copyright (c) 2021
  */
 public class Product extends AbstractEntity
 {
@@ -18,6 +18,10 @@ public class Product extends AbstractEntity
 	 *
 	 */
 	private static final long serialVersionUID = -583048283974323185L;
+
+	private Company company;
+
+	private ProductDepositData depositData;
 
 	@NotBlank
 	@Length(min = 3, max = 255)
@@ -28,14 +32,12 @@ public class Product extends AbstractEntity
 
 	private Set<ProductDetail> productDetails;
 
-	private Company company;
-
 	/**
 	 * default constructor
 	 */
 	public Product()
 	{
-
+		super();
 	}
 
 	/**
@@ -53,20 +55,35 @@ public class Product extends AbstractEntity
 	/**
 	 *
 	 * @param name
-	 * @param price *
+	 * @param price
 	 * @param company
+	 * @param depositData
 	 */
-	public Product(final String name, final BigDecimal price, final Company company)
+	public Product(final String name, final BigDecimal price, final Company company, final ProductDepositData depositData)
 	{
 		this.name = name;
 		this.price = price;
 		this.company = company;
+		this.depositData = depositData;
 	}
 
 	@Override
 	public Product clone()
 	{
-		return new Product(this.getName(), this.price, this.getCompany());
+		return new Product(this.name, this.price, this.company, this.depositData);
+	}
+
+	/**
+	 * @return the company
+	 */
+	public Company getCompany()
+	{
+		return this.company;
+	}
+
+	public ProductDepositData getDepositData()
+	{
+		return this.depositData;
 	}
 
 	/**
@@ -78,19 +95,37 @@ public class Product extends AbstractEntity
 	}
 
 	/**
-	 * @param name the name to set
-	 */
-	public void setName(final String name)
-	{
-		this.name = name;
-	}
-
-	/**
 	 * @return the price
 	 */
 	public BigDecimal getPrice()
 	{
 		return this.price;
+	}
+
+	public Set<ProductDetail> getProductDetails()
+	{
+		return this.productDetails;
+	}
+
+	/**
+	 * @param company the company to set
+	 */
+	public void setCompany(final Company company)
+	{
+		this.company = company;
+	}
+
+	public void setDepositData(final ProductDepositData depositData)
+	{
+		this.depositData = depositData;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(final String name)
+	{
+		this.name = name;
 	}
 
 	/**
@@ -104,36 +139,20 @@ public class Product extends AbstractEntity
 		this.price = price;
 	}
 
-	public Set<ProductDetail> getProductDetails()
-	{
-		return this.productDetails;
-	}
-
 	public void setProductDetails(final Set<ProductDetail> productDetails)
 	{
 		this.productDetails = productDetails;
 	}
 
-	/**
-	 * @return the company
-	 */
-	public Company getCompany()
+	public void toggleProductDepositData()
 	{
-		return this.company;
-	}
 
-	/**
-	 * @param company the company to set
-	 */
-	public void setCompany(final Company company)
-	{
-		this.company = company;
 	}
 
 	@Override
 	public String toString()
 	{
-		return "Product :  [id=" + this.id + ", name=" + this.name + ", price=" + this.price + "]";
+		return "Product :  [id=" + this.id + ", name=" + this.name + ", price=" + this.price + ", " + String.valueOf(this.depositData) + "]";
 	}
 
 }

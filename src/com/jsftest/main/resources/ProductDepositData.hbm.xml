@@ -1,0 +1,20 @@
+<!-- <?xml version="1.0"?> -->
+<!-- <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" -->
+<!--                                    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd"> -->
+<!-- <hibernate-mapping> -->
+<!--  <class name="com.jsftest.main.java.entities.ProductDepositData"  table="product_deposite_data"> -->
+<!--   		<id name="id" type="java.lang.Long"> -->
+<!--             <column name="id" /> -->
+<!--             <generator class="identity" /> -->
+<!--         </id> -->
+ 	 
+<!-- 	    <natural-id mutable="true" > -->
+<!-- 	  		<property name="name"/>  -->
+<!-- 	    </natural-id> -->
+<!-- 	 	<property name="deposite" type="big_decimal" /> -->
+<!-- 	 	<property name="sytem" type="org.hibernate.type.EnumType"/> -->
+	
+<!--   		<many-to-one name="productDeposite" class="com.jsftest.main.java.entities.Product" column="productID"   fetch="select"   lazy="false" /> -->
+<!--  </class> -->
+		  
+<!-- </hibernate-mapping> -->

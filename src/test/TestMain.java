@@ -21,38 +21,19 @@ public class TestMain
 
 	public static void main(final String[] args)
 	{
+		// Test companies
+		// TestMain.testCompanies();
 
-		TestMain.testProductsAndCompanies();
-		/*
-		 * for (final TimeZone t : TimeZoneConverter.getAvailableTimeZones())
-		 * System.out.println(t); System.out.println("Total size: " +
-		 * TimeZoneConverter.getAvailableTimeZones().size());
-		 */
+		// Test products
+		TestMain.testProducts();
 
 	}
 
 	/**
 	 *
 	 */
-	public static void testProductsAndCompanies()
+	public static void testCompanies()
 	{
-		// Add new product
-		// final Product newproduct = new Product();
-		// newproduct.setName("Demo Product 2");
-		// newproduct.setPrice(BigDecimal.valueOf(200.00));
-		//
-		// // Add new company
-		// final Company newCompany = new Company();
-		// newCompany.setName("Another company");
-		// newCompany.setLocation("Another location");
-		//
-		// // first save the company
-		// TestMain.companyDAO.save(newCompany);
-		//
-		// // Set the company into the product
-		// newproduct.setCompany(newCompany);
-		//
-		// TestMain.productDAO.save(newproduct);
 
 		try
 		{
@@ -62,16 +43,49 @@ public class TestMain
 			 * TestMain.productDAO.findAll();
 			 */
 			for (final Company company : TestMain.companyDAO.findAll())
-				if (company != null)
-					TestMain.companies = TestMain.companyDAO.findAll();
+				TestMain.companies.add(company);
+		}
+		catch (final Exception e)
+		{
+			e.printStackTrace();
+		}
 
+		System.out.println(TestMain.companies.size());
+	}
+
+	/**
+	 *
+	 */
+	public static void testProducts()
+	{
+
+		try
+		{
+
+			System.out.println(TestMain.productDAO.findById(Long.valueOf(1628)));
+
+			/*
+			 * for (final Product product : TestMain.productDAO.findAll())
+			 * TestMain.products.add(product);
+			 *
+			 * final Company company =
+			 * TestMain.companyDAO.findById(Long.valueOf((long) 14.0));
+			 *
+			 * final Product newProduct = new Product("Product DD",
+			 * BigDecimal.valueOf(150.0), company, new
+			 * ProductDepositData(BigDecimal.valueOf(150.0),
+			 * ProductDepositSystem.REUSE)); //
+			 * TestMain.productDAO.save(newProduct);
+			 *
+			 * System.out.println(newProduct.toString());
+			 */
 		}
 		catch (final Exception e)
 		{
 			e.printStackTrace();
 		}
 		// System.out.println(TestMain.products);
-		System.out.println(TestMain.companies);
+		// System.out.println(TestMain.products);
 	}
 
 }

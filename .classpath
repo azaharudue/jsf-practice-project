@@ -49,15 +49,16 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="H:/dev/resources/libraries/mysql-connector-java-8.0.11.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="H:/dev/resources/libraries/faces/primefaces-extensions-8.0.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="H:/dev/resources/libraries/dbconnector-jdbc/mysql-connector-java-8.0.25.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/Azahar Hossain/Downloads/javassist-3.20.0-GA.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
